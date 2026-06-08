@@ -2,7 +2,7 @@
 
 **Bewerbungen strukturiert verwalten — vom ersten Interesse bis zur Zusage.**
 
-JobFlow ist eine Multi-User-Webanwendung, die den gesamten Bewerbungsprozess in übersichtlich visualisiert. Statt Tabellen und Tab-Chaos hast du alle Bewerbungen, Unternehmen, Ansprechpartner und Dokumente an einem Ort und immer den Überblick darüber, wo du gerade stehst.
+JobFlow ist eine Multi-User-Webanwendung (SPA), die den gesamten Bewerbungsprozess übersichtlich visualisiert. Statt Tabellen und Tab-Chaos hast du alle Bewerbungen, Unternehmen, Ansprechpartner und Dokumente an einem Ort und immer den Überblick darüber, wo du gerade stehst.
 
 ---
 
@@ -60,7 +60,7 @@ Das Projekt ist als **pnpm-Monorepo** mit drei Packages aufgebaut:
 packages/
 ├── shared/    # Zod-Schemas, TypeScript-Types, Konstanten
 ├── backend/   # Express 5 REST API
-└── frontend/  # React 19
+└── frontend/  # React 19 SPA, Vite, shadcn/ui, Zod, TypeScript
 ```
 
 Das `shared`-Package ist der gemeinsame Vertrag zwischen Backend und Frontend: Zod-Schemas werden einmal definiert und auf beiden Seiten verwendet — für die Formularvalidierung im Browser und für die Request-Validierung auf dem Server. Kein Build-Schritt nötig, beide Consumer lesen TypeScript-Source direkt.
