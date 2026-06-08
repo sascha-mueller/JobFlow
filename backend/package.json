@@ -1,0 +1,30 @@
+{
+  "name": "@jobflow/backend",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch --strip-types --conditions=development --env-file=.env src/app.ts",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@jobflow/shared": "workspace:*",
+    "bcrypt": "^5.0.0",
+    "cors": "^2.8.5",
+    "express": "^5.0.0",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^8.0.0",
+    "multer": "^1.4.5",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/cors": "^2.8.0",
+    "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.0",
+    "@types/multer": "^1.4.0",
+    "@vitest/coverage-v8": "^3.0.0",
+    "typescript": "^6.0.0",
+    "vitest": "^3.0.0"
+  }
+}
