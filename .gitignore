@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env
+
+backend/uploads/
+
+docs/*
+!docs/elevator-pitch.md
