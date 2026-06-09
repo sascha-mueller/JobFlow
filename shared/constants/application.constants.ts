@@ -2,7 +2,6 @@ import { z } from "zod";
 
 export const ApplicationStatus = z.enum([
   "WATCHLIST",
-  "FAVORITES",
   "DRAFT",
   "SENT",
   "INTERVIEW",

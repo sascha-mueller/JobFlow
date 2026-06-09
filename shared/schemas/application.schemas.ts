@@ -10,6 +10,7 @@ export const createApplicationSchema = z.object({
   salaryMin: z.number().optional(),
   salaryMax: z.number().optional(),
   link: z.url().optional(),
+  isFavorite: z.boolean().default(false),
   status: ApplicationStatus,
   company: z.string().optional(), // MongoDB ObjectId als String vom Client
   contact: z.string().optional(), // MongoDB ObjectId als String vom Client
@@ -17,6 +18,7 @@ export const createApplicationSchema = z.object({
   workMode: WorkMode.optional(),
   appliedAt: z.string().optional(),
   deadline: z.string().optional(),
+  followUpAt: z.string().optional(),
   notes: z.string().optional(),
 });
 
