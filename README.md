@@ -99,3 +99,8 @@ pnpm dev        # Frontend (Port 5173) + Backend (Port 3001) parallel
 pnpm test       # Vitest in allen Packages
 pnpm typecheck  # TypeScript-Check in allen Packages
 ```
+
+## Projektverwaltung
+
+Die Projektverwaltung wird mit **github Projects** koordiniert und ist unter folgendem Link zu finden:
+[JobFlow Projektplan](https://github.com/users/sascha-mueller/projects/1)
