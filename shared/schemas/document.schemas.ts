@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { DocumentType } from "../constants/document.constants";
+import { DocumentType } from "../constants/document.constants.ts";
 
 export const createDocumentSchema = z.object({
   type: DocumentType,

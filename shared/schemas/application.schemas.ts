@@ -2,7 +2,7 @@ import { z } from "zod";
 import {
   ApplicationStatus,
   WorkMode,
-} from "../constants/application.constants";
+} from "../constants/application.constants.ts";
 
 export const createApplicationSchema = z.object({
   name: z.string().min(3),

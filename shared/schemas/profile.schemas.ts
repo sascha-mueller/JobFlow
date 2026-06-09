@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Salutation } from "../constants/profile.constants";
+import { Salutation } from "../constants/profile.constants.ts";
 
 export const createProfileSchema = z.object({
   firstName: z.string().min(2),
