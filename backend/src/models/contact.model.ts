@@ -19,4 +19,7 @@ const contactSchema = new Schema<ContactDocument>(
   { timestamps: true }
 );
 
+contactSchema.index({ user: 1 });
+contactSchema.index({ user: 1, company: 1 });
+
 export const Contact = model<ContactDocument>("Contact", contactSchema);

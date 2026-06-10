@@ -18,4 +18,6 @@ const companySchema = new Schema<CompanyDocument>(
   { timestamps: true }
 );
 
+companySchema.index({ user: 1 });
+
 export const Company = model<CompanyDocument>("Company", companySchema);
