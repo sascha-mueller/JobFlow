@@ -10,7 +10,7 @@ import {
   REFRESH_TOKEN_TTL,
   SALT_ROUNDS,
 } from "../config/index.ts";
-import { AppError } from "./index.ts";
+import { AppError } from "../utils/index.ts";
 
 export const getCookieOpts = () =>
   ({
