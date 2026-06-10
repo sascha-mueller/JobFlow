@@ -39,6 +39,11 @@ const applicationSchema = new Schema<ApplicationDocument>(
   { timestamps: true }
 );
 
+applicationSchema.index({ user: 1, createdAt: -1 });
+applicationSchema.index({ user: 1, status: 1 });
+applicationSchema.index({ user: 1, isFavorite: 1 });
+applicationSchema.index({ user: 1, followUpAt: 1 });
+
 export const Application = model<ApplicationDocument>(
   "Application",
   applicationSchema

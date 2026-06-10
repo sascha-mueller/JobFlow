@@ -26,4 +26,7 @@ const documentSchema = new Schema<DocDocument>(
 );
 
 // "Document" als Variablenname würde den globalen Node.js-Typ shadowing — daher DocumentModel
+documentSchema.index({ user: 1 });
+documentSchema.index({ user: 1, application: 1 });
+
 export const DocumentModel = model<DocDocument>("Document", documentSchema);
