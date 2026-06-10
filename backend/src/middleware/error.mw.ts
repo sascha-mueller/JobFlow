@@ -1,5 +1,6 @@
 import type { ErrorRequestHandler } from "express";
 
+import { NODE_ENV } from "../config/index.ts";
 import { AppError, writeLog } from "../utils/index.ts";
 
 export const baseErrHandler: ErrorRequestHandler = (err, req, res, _next) => {
@@ -35,7 +36,7 @@ export const extErrHandler: ErrorRequestHandler = (err, req, res, next) => {
     message: err.message,
     errorCode: err.errorCode,
     stack:
-      process.env.NODE_ENV === "development" && err instanceof Error
+      NODE_ENV === "development" && err instanceof Error
         ? err.stack?.split("\n").map((line) => line.trim())
         : undefined,
   });

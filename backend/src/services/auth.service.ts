@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import type { JwtPayload } from "jsonwebtoken";
 
-import type { Role, AccessTokenPayload } from "../types/index.ts";
 import {
   NODE_ENV,
   ACCESS_JWT_SECRET,
@@ -10,6 +10,7 @@ import {
   REFRESH_TOKEN_TTL,
   SALT_ROUNDS,
 } from "../config/index.ts";
+import { User } from "../models/index.ts";
 import { AppError } from "../utils/index.ts";
 
 export const getCookieOpts = () =>
@@ -28,8 +29,8 @@ export const comparePassword = async (
   hashedPassword: string,
 ) => bcrypt.compare(password, hashedPassword);
 
-export const createAccessToken = (id: string, roles: Role[]) => {
-  return jwt.sign({ roles }, ACCESS_JWT_SECRET, {
+export const createAccessToken = (id: string) => {
+  return jwt.sign({}, ACCESS_JWT_SECRET, {
     subject: id,
     expiresIn: ACCESS_TOKEN_TTL,
   });
@@ -66,14 +67,34 @@ export const getBearerToken = (authHeader?: string) => {
 };
 
 export const parseAccessToken = (token: string) => {
-  const payload = verifyToken<AccessTokenPayload>(token, ACCESS_JWT_SECRET);
+  const payload = verifyToken<JwtPayload>(token, ACCESS_JWT_SECRET);
 
-  if (!payload.sub || !payload.roles) {
+  if (!payload.sub) {
     throw new AppError(401, "Invalid token payload", "INVALID_TOKEN", "WARN");
   }
 
   return {
     id: payload.sub,
-    roles: payload.roles,
   };
+};
+
+export const refreshAccessToken = async (refreshToken: string) => {
+  const payload = verifyToken<JwtPayload>(refreshToken, REFRESH_JWT_SECRET);
+
+  if (!payload.sub) {
+    throw new AppError(401, "Invalid token payload", "INVALID_TOKEN", "WARN");
+  }
+
+  const user = await User.findById(payload.sub);
+
+  if (!user) {
+    throw new AppError(
+      404,
+      `User: ${payload.sub} not found`,
+      "NO_USER",
+      "WARN",
+    );
+  }
+
+  return createAccessToken(payload.sub);
 };
