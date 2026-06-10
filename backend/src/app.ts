@@ -1,12 +1,18 @@
-import express from 'express';
+import express from "express";
+import cookieParser from "cookie-parser";
 
-import connectDB from './db/index.ts';
+import { PORT } from './config/index.ts';
+import connectDB from "./db/index.ts";
+import { authRouter } from "./routes/index.ts";
 
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 
-const startServer = async (PORT = 3000) => {
+app.use("/api/auth", authRouter);
+
+const startServer = async () => {
   try {
     await connectDB();
 
@@ -16,7 +22,7 @@ const startServer = async (PORT = 3000) => {
       ),
     );
   } catch (error: unknown) {
-    console.error('Failed to start server:', error);
+    console.error("Failed to start server:", error);
     process.exit(1);
   }
 };
