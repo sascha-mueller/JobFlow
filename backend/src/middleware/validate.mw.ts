@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
 import { type ZodType } from "zod";
-import { AppError } from "../utils/AppError.ts";
+import { AppError } from "../utils/index.ts";
 
 // String Literal Union Types
 type ValidationSource = "body" | "params" | "query";

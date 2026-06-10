@@ -8,8 +8,9 @@ import {
   ACCESS_TOKEN_TTL,
   REFRESH_JWT_SECRET,
   REFRESH_TOKEN_TTL,
+  SALT_ROUNDS,
 } from "../config/index.ts";
-import { AppError } from "./AppError.ts";
+import { AppError } from "./index.ts";
 
 export const getCookieOpts = () =>
   ({
@@ -19,10 +20,8 @@ export const getCookieOpts = () =>
     path: "/",
   }) as const;
 
-export const salt = await bcrypt.genSalt(13);
-
 export const hashPassword = async (password: string) =>
-  bcrypt.hash(password, salt);
+  bcrypt.hash(password, SALT_ROUNDS);
 
 export const comparePassword = async (
   password: string,
