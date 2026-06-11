@@ -5,7 +5,7 @@ import { PORT } from "./config/index.ts";
 import connectDB from "./db/index.ts";
 
 import { baseErrHandler, extErrHandler } from "./middleware/index.ts";
-import { authRouter, companyRouter } from "./routes/index.ts";
+import { authRouter, companyRouter, contactRouter } from "./routes/index.ts";
 
 const app = express();
 
@@ -14,6 +14,7 @@ app.use(cookieParser());
 
 app.use("/api/auth", authRouter);
 app.use("/api/companies", companyRouter);
+app.use("/api/contacts", companyRouter);
 
 app.use((_req, res) => {
   res.status(404).json({ message: "Route not found" });

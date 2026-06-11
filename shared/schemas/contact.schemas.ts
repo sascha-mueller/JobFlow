@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { objectIdSchema } from "./common/objectId.schema.ts";
 
 export const createContactSchema = z.object({
   name: z.string().min(2),
@@ -12,3 +13,7 @@ export const updateContactSchema = createContactSchema.partial();
 
 export type CreateContactInput = z.infer<typeof createContactSchema>;
 export type UpdateContactInput = z.infer<typeof updateContactSchema>;
+
+export const contactIdParamsSchema = z.object({
+  id: objectIdSchema,
+});
