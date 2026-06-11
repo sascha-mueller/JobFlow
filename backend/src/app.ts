@@ -14,7 +14,7 @@ app.use(cookieParser());
 
 app.use("/api/auth", authRouter);
 app.use("/api/companies", companyRouter);
-app.use("/api/contacts", companyRouter);
+app.use("/api/contacts", contactRouter);
 
 app.use((_req, res) => {
   res.status(404).json({ message: "Route not found" });
