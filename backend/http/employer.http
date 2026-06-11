@@ -1,0 +1,124 @@
+@baseUrl = http://localhost:3001/api
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3ODEyMDgwNjEsImV4cCI6MTc4MTIwODk2MSwic3ViIjoiNmEyOWU0Y2EzOWJjOThhMjk4NGMwMWMzIn0.C4rAGvWJkB9wqxeU7aQ6kes1ceSgK3Vz7CPXlGtfoW0
+@companyAId = 6a2b105bf0e70d96b21cfbaa
+@companyBId = 6a2b10f6f0e70d96b21cfbad
+
+### GET companies
+GET {{baseUrl}}/companies
+Authorization: Bearer {{accessToken}}
+
+### POST create company A
+POST {{baseUrl}}/companies
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Alpha GmbH",
+  "street": "Hauptstrasse 12",
+  "city": "Essen",
+  "zip": "45127",
+  "website": "https://alpha.example.com",
+  "notes": "Test company A"
+}
+
+### POST create company B
+POST {{baseUrl}}/companies
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Beta AG",
+  "street": "Bahnhofstrasse 8",
+  "city": "Dortmund",
+  "zip": "44135",
+  "website": "https://beta.example.com",
+  "notes": "Test company B"
+}
+
+### GET company A by id
+GET {{baseUrl}}/companies/{{companyAId}}
+Authorization: Bearer {{accessToken}}
+
+### PATCH company A
+PATCH {{baseUrl}}/companies/{{companyAId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "notes": "Updated notes for Alpha GmbH"
+}
+
+### DELETE company B
+DELETE {{baseUrl}}/companies/{{companyBId}}
+Authorization: Bearer {{accessToken}}
+
+
+
+### GET contacts
+GET {{baseUrl}}/contacts
+Authorization: Bearer {{accessToken}}
+
+### POST create contact A1
+POST {{baseUrl}}/contacts
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Max Müller",
+  "email": "max.mueller@alpha.example.com",
+  "phone": "+49 201 123456",
+  "company": "{{companyAId}}",
+  "linkedIn": "https://www.linkedin.com/in/max-mueller-alpha"
+}
+
+### POST create contact A2 same name different email
+POST {{baseUrl}}/contacts
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Max Müller",
+  "email": "max.hr@alpha.example.com",
+  "phone": "+49 201 654321",
+  "company": "{{companyAId}}",
+  "linkedIn": "https://www.linkedin.com/in/max-hr-alpha"
+}
+
+### POST create contact A3
+POST {{baseUrl}}/contacts
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Anna Schmidt",
+  "email": "anna.schmidt@alpha.example.com",
+  "phone": "+49 201 777777",
+  "company": "{{companyAId}}",
+  "linkedIn": "https://www.linkedin.com/in/anna-schmidt-alpha"
+}
+
+### POST create contact B1 same name as A3
+POST {{baseUrl}}/contacts
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Anna Schmidt",
+  "email": "anna.schmidt@beta.example.com",
+  "phone": "+49 231 111111",
+  "company": "{{companyBId}}",
+  "linkedIn": "https://www.linkedin.com/in/anna-schmidt-beta"
+}
+
+### POST create contact B2
+POST {{baseUrl}}/contacts
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Peter Weber",
+  "email": "peter.weber@beta.example.com",
+  "phone": "+49 231 222222",
+  "company": "{{companyBId}}",
+  "linkedIn": "https://www.linkedin.com/in/peter-weber-beta"
+}
