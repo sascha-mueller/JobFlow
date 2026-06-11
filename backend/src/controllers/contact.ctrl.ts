@@ -24,8 +24,7 @@ export const createContact: RequestHandler = async (req, res, next) => {
     const userId = req.user!.id;
 
     const found = await Contact.findOne({
-      name: data.name,
-      user: userId,
+      email: data.email,
     });
 
     if (found) {

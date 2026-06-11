@@ -3,7 +3,7 @@ import { objectIdSchema } from "./common/objectId.schema.ts";
 
 export const createContactSchema = z.object({
   name: z.string().min(2),
-  email: z.email().optional(),
+  email: z.email(),
   phone: z.string().optional(),
   company: z.string().optional(), // MongoDB ObjectId als String vom Client
   linkedIn: z.url().optional(),
