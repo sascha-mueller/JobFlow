@@ -1,5 +1,5 @@
 @baseUrl = http://localhost:3001/api
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3ODEyMDgwNjEsImV4cCI6MTc4MTIwODk2MSwic3ViIjoiNmEyOWU0Y2EzOWJjOThhMjk4NGMwMWMzIn0.C4rAGvWJkB9wqxeU7aQ6kes1ceSgK3Vz7CPXlGtfoW0
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3ODEyMTMzMDEsImV4cCI6MTc4MTI5OTcwMSwic3ViIjoiNmEyOWU0Y2EzOWJjOThhMjk4NGMwMWMzIn0.P0dHGDSqL54_fK0UfMTEPgX-2Mh7CbosJJITW1VC8MY
 @companyAId = 6a2b105bf0e70d96b21cfbaa
 @companyBId = 6a2b10f6f0e70d96b21cfbad
 
