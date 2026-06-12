@@ -36,7 +36,7 @@ export const register: RequestHandler = async (req, res, next) => {
 
     const refreshToken = createRefreshToken(user.id);
 
-    user.refreshTokens.push(refreshToken);
+    user.refreshToken = refreshToken;
     await user.save();
 
     res.cookie("refreshToken", refreshToken, {
@@ -86,6 +86,9 @@ export const login: RequestHandler = async (req, res, next) => {
 
     const refreshToken = createRefreshToken(user.id);
 
+    user.refreshToken = refreshToken;
+    await user.save();
+
     res.cookie("refreshToken", refreshToken, {
       ...getCookieOpts(),
       expires: new Date(Date.now() + REFRESH_TOKEN_TTL * 1000),
@@ -103,8 +106,20 @@ export const login: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const logout: RequestHandler = (req, res, next) => {
+export const logout: RequestHandler = async (req, res, next) => {
   try {
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) {
+      return res.sendStatus(204);
+    }
+
+    const payload = verifyToken<JwtPayload>(refreshToken, REFRESH_JWT_SECRET);
+
+    await User.findByIdAndUpdate(payload.sub, {
+      $unset: { refreshToken: "" },
+    });
+
     res.clearCookie("refreshToken", {
       ...getCookieOpts(),
     });
@@ -141,9 +156,16 @@ export const refresh: RequestHandler = async (req, res, next) => {
 
     const user = await assertUserExists(payLoad.sub);
 
-    const accessToken = createAccessToken(user.id);
+    if (user.refreshToken !== refreshToken) {
+      throw new AppError(
+        401,
+        "Invalid refresh token",
+        "INVALID_REFRESH_TOKEN",
+        "WARN",
+      );
+    }
 
-    res.cookie("accessToken", accessToken, getCookieOpts());
+    const accessToken = createAccessToken(user.id);
 
     res.status(200).json({
       user: {
