@@ -2,3 +2,5 @@
 @import "./styles/shadcn.css";
 @import "./styles/variables.css";
 @import "./styles/layouts/container.css";
+
+@import "./styles/components/logo.css";

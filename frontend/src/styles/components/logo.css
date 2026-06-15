@@ -1,0 +1,24 @@
+.logo {
+}
+
+.logo__link {
+  display: flex;
+  align-items: center;
+
+  font-family: var(--serif);
+  font-size: 24.64px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.logo__img {
+  margin-inline-end: 0.75rem;
+  background-color: var(--accent);
+  color: white;
+  border-radius: var(--radius-sm);
+}
+
+.logo__txt-highlight {
+  font-style: italic;
+  color: var(--accent);
+}
