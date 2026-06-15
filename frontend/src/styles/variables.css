@@ -1,0 +1,131 @@
+@layer base {
+  /* ════════════════════════════════════════════════════════════
+   JobFlow · Design Tokens
+   Editorial / Dossier-System — Schriften & Farben
+
+   Aufbau in zwei Ebenen:
+     EBENE 1 · Grundwerte   → die wenigen Quellen, aus denen alles
+                              abgeleitet wird (hier anpassen).
+     EBENE 2 · Semantik     → benannt nach Einsatzort, referenziert
+                              nur Ebene 1.
+   ════════════════════════════════════════════════════════════ */
+
+  :root {
+    /* ══════════════════════════════════════════════════════════
+      EBENE 1 — GRUNDWERTE (Foundation)
+      ══════════════════════════════════════════════════════════ */
+
+    /* ─── Schrift-Familien ─────────────────────────────────── */
+    --family-serif: "Newsreader", Georgia, "Times New Roman", serif;
+    --family-sans: "Hanken Grotesk", system-ui, sans-serif;
+    --family-mono: "Space Mono", ui-monospace, monospace;
+
+    /* ─── Markenfarbe ──────────────────────────────────────── */
+    /* Das eine Grün. Alle Akzenttöne werden daraus gemischt.   */
+    --brand: #0f8f5e;
+
+    /* ─── Neutral-Achsen ───────────────────────────────────── */
+    /* Das Papier-Neutral ist leicht grün gestimmt. Die Hellig- */
+    /* keit bildet die Rampe, der Farbton driftet je nach Ein-  */
+    /* satzort minimal: Flächen kühler, Schrift wärmer.         */
+    --hue-surface: 150; /* Hintergründe & Flächen */
+    --hue-line: 160; /* Linien / Rahmen */
+    --hue-ink: 165; /* Schrift / Tinte */
+
+    /* ─── Status-Helligkeiten ──────────────────────────────── */
+    /* Jeder Status = ein Farbton mit zwei Tönen:               */
+    /*   ·ink   kräftig & lesbar  (Text, Icon)                  */
+    /*   ·soft  fast weiß getönt  (Badge-Fläche)                */
+    --status-ink-l: 0.43; /* Lesbarer Vordergrund-Ton */
+    --status-soft-l: 0.953; /* Heller Flächen-Ton */
+
+    /* ══════════════════════════════════════════════════════════
+      EBENE 2 — SEMANTIK (nach Einsatzort benannt)
+      ══════════════════════════════════════════════════════════ */
+
+    /* ─── Typografie ───────────────────────────────────────── */
+    --font-heading: var(--family-serif); /* h1, h2 — Serifen-Display */
+    --font-body: var(--family-sans); /* Fließtext & UI */
+    --font-label: var(--family-mono); /* Eyebrows, Labels, Badges, Zahlen */
+
+    /* ─── Hintergründe & Flächen ───────────────────────────── */
+    --bg-page: oklch(0.98 0.005 var(--hue-surface)); /* Seitenhintergrund */
+    --bg-canvas: oklch(
+      0.944 0.007 var(--hue-surface)
+    ); /* Backdrop außerhalb der Shell */
+    --surface: #ffffff; /* Karten, Panels */
+    --surface-muted: oklch(
+      0.968 0.007 var(--hue-surface)
+    ); /* dezente Füllung */
+    --surface-sunken: oklch(
+      0.95 0.009 var(--hue-surface)
+    ); /* tiefere Füllung / Hover */
+
+    /* ─── Schrift-Farben ───────────────────────────────────── */
+    --text: oklch(
+      0.225 0.026 var(--hue-ink)
+    ); /* Standardtext / Überschriften */
+    --text-muted: oklch(0.378 0.024 var(--hue-ink)); /* sekundär */
+    --text-faint: oklch(0.43 0.022 var(--hue-ink)); /* Hinweise, Platzhalter */
+
+    /* ─── Linien & Rahmen ──────────────────────────────────── */
+    --border: oklch(0.905 0.011 var(--hue-line)); /* Haarlinie */
+    --border-strong: oklch(0.855 0.014 var(--hue-line)); /* kräftiger Rahmen */
+
+    /* ─── Akzent (alles aus --brand abgeleitet) ────────────── */
+    --accent: var(--brand);
+    --accent-strong: color-mix(in oklab, var(--brand), black 16%); /* Hover */
+    --accent-deep: color-mix(
+      in oklab,
+      var(--brand),
+      black 40%
+    ); /* sehr dunkel */
+    --accent-ink: color-mix(
+      in oklab,
+      var(--brand),
+      var(--text) 55%
+    ); /* grünstichige Tinte */
+    --accent-soft: color-mix(
+      in oklab,
+      var(--brand),
+      white 86%
+    ); /* Fläche / Selektion */
+    --accent-softer: color-mix(
+      in oklab,
+      var(--brand),
+      white 93%
+    ); /* zarteste Fläche */
+    --accent-line: color-mix(
+      in oklab,
+      var(--brand),
+      white 64%
+    ); /* Akzent-Rahmen */
+    --on-accent: #ffffff; /* Text auf Akzent */
+
+    /* ─── Status (aus Helligkeiten + Farbton/Chroma) ───────── */
+    /* ·ink  = Vordergrund   ·soft = Badge-Fläche               */
+    --status-entwurf: oklch(
+      var(--status-ink-l) 0.022 250
+    ); /* Entwurf · neutral/grau */
+    --status-entwurf-soft: oklch(var(--status-soft-l) 0.006 250);
+    --status-eingereicht: oklch(
+      var(--status-ink-l) 0.128 252
+    ); /* Eingereicht · blau */
+    --status-eingereicht-soft: oklch(var(--status-soft-l) 0.028 252);
+    --status-gespraech: oklch(
+      var(--status-ink-l) 0.112 70
+    ); /* Gespräch · bernstein */
+    --status-gespraech-soft: oklch(var(--status-soft-l) 0.04 70);
+    --status-angebot: oklch(var(--status-ink-l) 0.128 158); /* Angebot · grün */
+    --status-angebot-soft: oklch(var(--status-soft-l) 0.038 158);
+    --status-absage: oklch(var(--status-ink-l) 0.15 22); /* Absage · rot */
+    --status-absage-soft: oklch(var(--status-soft-l) 0.028 22);
+
+    /** Dimensions */
+    --page-max-width: 100rem;
+
+    --sidebar-w: 15.5rem;
+
+    --border-thickness: 0.0125rem;
+  }
+}
