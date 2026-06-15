@@ -1,7 +1,17 @@
-export default function Dashbaord() {
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen gap-4">
-      Dashbaord
-    </div>
-  );
+import { useEffect } from "react";
+import { useUiStore } from "@/stores/ui.store";
+
+export default function Dashboard() {
+  const setPageMeta = useUiStore((s) => s.setPageMeta);
+
+  useEffect(() => {
+    setPageMeta({
+      title: "Dashboard",
+      subtitle: "Deine Übersicht",
+      metaTitle: "Dashboard | JobFlow",
+      metaDescription: "Verwalte deine Bewerbungen auf einen Blick.",
+    });
+  }, [setPageMeta]);
+
+  return <div>Dashboard</div>;
 }
