@@ -7,7 +7,13 @@ import {
   getDocuments,
   updateDocument,
 } from "../controllers/index.ts";
-import { authToken, validate } from "../middleware/index.ts";
+import {
+  authToken,
+  validate,
+  fileRead,
+  fileValidate,
+  fileStore,
+} from "../middleware/index.ts";
 import {
   documentIdParamsSchema,
   createDocumentSchema,
@@ -21,13 +27,22 @@ docRouter.use(authToken);
 docRouter
   .route("/")
   .get(getDocuments)
-  .post(validate(createDocumentSchema), createDocument);
+  .post(
+    fileRead,
+    fileValidate("create"),
+    fileStore,
+    validate(createDocumentSchema),
+    createDocument,
+  );
 
 docRouter
   .route("/:id")
   .get(validate(documentIdParamsSchema, "params"), getDocumentById)
   .patch(
     validate(documentIdParamsSchema, "params"),
+    fileRead,
+    fileValidate("update"),
+    fileStore,
     validate(updateDocumentSchema),
     updateDocument,
   )

@@ -1,0 +1,98 @@
+@baseUrl = http://localhost:3001/api
+@userId = 6a2f3a7716b248a769867d39
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3ODE1NjM2NTUsImV4cCI6MTc4MTY1MDA1NSwic3ViIjoiNmEyOWU0Y2EzOWJjOThhMjk4NGMwMWMzIn0.fXOK_X2TqGu2tJO0xk5hrNPoCdtU3iz64ZsGpnrNb80
+
+
+
+### Create Profile
+POST {{baseUrl}}/profiles
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "firstName": "Qian",
+  "lastName": "Gong",
+  "salutation": "MR",
+  "headline": "Backend Developer",
+  "summary": "Experienced backend developer with Java, TypeScript and IT-Security background.",
+  "skills": [
+    "Java",
+    "TypeScript",
+    "Node.js",
+    "MongoDB"
+  ]
+}
+
+### Create Profile Again (should return PROFILE_EXISTS)
+POST {{baseUrl}}/profiles
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "firstName": "Duplicate",
+  "lastName": "Profile"
+}
+
+### Get My Profile
+GET {{baseUrl}}/profiles/me
+Authorization: Bearer {{accessToken}}
+
+### Update My Profile
+PATCH {{baseUrl}}/profiles/me
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "headline": "Backend & IT-Security Developer",
+  "skills": [
+    "Java",
+    "TypeScript",
+    "Node.js",
+    "MongoDB",
+    "React"
+  ]
+}
+
+### Delete My Profile
+DELETE {{baseUrl}}/profiles/me
+Authorization: Bearer {{accessToken}}
+
+### Get Profile After Delete (should return NO_PROFILE)
+GET {{baseUrl}}/profiles/me
+Authorization: Bearer {{accessToken}}
+
+
+
+### Upload PDF
+POST {{baseUrl}}/docs
+Authorization: Bearer {{accessToken}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="type"
+
+CV
+--boundary
+Content-Disposition: form-data; name="file"; filename="test.pdf"
+Content-Type: application/pdf
+
+< ../logs/test.pdf
+--boundary--
+
+
+
+### Upload JPG
+POST {{baseUrl}}/docs
+Authorization: Bearer {{accessToken}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="type"
+
+PHOTO
+--boundary
+Content-Disposition: form-data; name="file"; filename="test.png"
+Content-Type: image/jpeg
+
+< ../logs/test.png
+--boundary--
