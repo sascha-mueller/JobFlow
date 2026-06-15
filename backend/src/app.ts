@@ -11,6 +11,7 @@ import {
   contactRouter,
   userRouter,
   profileRouter,
+  docRouter,
 } from "./routes/index.ts";
 
 const app = express();
@@ -23,6 +24,7 @@ app.use("/api/companies", companyRouter);
 app.use("/api/contacts", contactRouter);
 app.use("/api/users", userRouter);
 app.use("/api/profiles", profileRouter);
+app.use("/api/docs", docRouter);
 
 app.use((req, res) => {
   console.warn("[404 Route]", {
