@@ -1,12 +1,13 @@
 .logo {
+  display: none;
 }
 
 .logo__link {
   display: flex;
   align-items: center;
 
-  font-family: var(--serif);
-  font-size: 24.64px;
+  font-family: var(--f-serif);
+  font-size: 24px;
   font-weight: 600;
   letter-spacing: -0.02em;
 }
@@ -19,6 +20,14 @@
 }
 
 .logo__txt-highlight {
-  font-style: italic;
+  font-style: 1;
+  line-height: inherit;
   color: var(--accent);
+  font-style: italic;
+}
+
+@container page-container (width > 768px) {
+  .logo {
+    display: block;
+  }
 }

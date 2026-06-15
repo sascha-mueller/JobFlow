@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import NavSidebar from "./NavSidebar";
 
 const Sidebar = () => {
   return (
@@ -28,6 +29,8 @@ const Sidebar = () => {
           <span className="logo__txt-highlight">Flow</span>
         </Link>
       </div>
+
+      <NavSidebar />
     </aside>
   );
 };
