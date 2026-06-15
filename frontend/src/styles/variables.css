@@ -16,9 +16,9 @@
       ══════════════════════════════════════════════════════════ */
 
     /* ─── Schrift-Familien ─────────────────────────────────── */
-    --family-serif: "Newsreader", Georgia, "Times New Roman", serif;
-    --family-sans: "Hanken Grotesk", system-ui, sans-serif;
-    --family-mono: "Space Mono", ui-monospace, monospace;
+    --f-serif: "Newsreader", Georgia, "Times New Roman", serif;
+    --f-sans: "Hanken Grotesk", system-ui, sans-serif;
+    --f-mono: "Space Mono", ui-monospace, monospace;
 
     /* ─── Markenfarbe ──────────────────────────────────────── */
     /* Das eine Grün. Alle Akzenttöne werden daraus gemischt.   */
