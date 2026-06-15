@@ -1,6 +1,10 @@
 @import "tailwindcss";
 @import "./styles/shadcn.css";
 @import "./styles/variables.css";
-@import "./styles/layouts/container.css";
 
+/** LAYOUT */
+@import "./styles/layouts/container.css";
+@import "./styles/layouts/header.css";
+
+/** COMPONENTS */
 @import "./styles/components/logo.css";

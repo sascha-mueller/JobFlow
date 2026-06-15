@@ -6,10 +6,11 @@ export default function Dashboard() {
 
   useEffect(() => {
     setPageMeta({
-      title: "Dashboard",
-      subtitle: "Deine Übersicht",
-      metaTitle: "Dashboard | JobFlow",
-      metaDescription: "Verwalte deine Bewerbungen auf einen Blick.",
+      title: "Übersicht",
+      subtitle: "Deine Bewerbungen",
+      metaTitle: "Dein Bewerbungsdashboard | JobFlow",
+      metaDescription:
+        "Verwalte deine Bewerbungen im Bewerbungsdashboard an einer Stelle.",
     });
   }, [setPageMeta]);
 
