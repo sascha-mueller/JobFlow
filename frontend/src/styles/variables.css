@@ -44,9 +44,9 @@
       ══════════════════════════════════════════════════════════ */
 
     /* ─── Typografie ───────────────────────────────────────── */
-    --font-heading: var(--family-serif); /* h1, h2 — Serifen-Display */
-    --font-body: var(--family-sans); /* Fließtext & UI */
-    --font-label: var(--family-mono); /* Eyebrows, Labels, Badges, Zahlen */
+    --font-heading: var(--f-serif); /* h1, h2 — Serifen-Display */
+    --font-body: var(--f-sans); /* Fließtext & UI */
+    --font-label: var(--f-mono); /* Eyebrows, Labels, Badges, Zahlen */
 
     /* ─── Hintergründe & Flächen ───────────────────────────── */
     --bg-page: oklch(0.98 0.005 var(--hue-surface)); /* Seitenhintergrund */
@@ -104,22 +104,28 @@
 
     /* ─── Status (aus Helligkeiten + Farbton/Chroma) ───────── */
     /* ·ink  = Vordergrund   ·soft = Badge-Fläche               */
-    --status-entwurf: oklch(
+    --status-draft: oklch(
       var(--status-ink-l) 0.022 250
     ); /* Entwurf · neutral/grau */
-    --status-entwurf-soft: oklch(var(--status-soft-l) 0.006 250);
-    --status-eingereicht: oklch(
+    --status-draft-soft: oklch(var(--status-soft-l) 0.006 250);
+    --status-submitted: oklch(
       var(--status-ink-l) 0.128 252
     ); /* Eingereicht · blau */
-    --status-eingereicht-soft: oklch(var(--status-soft-l) 0.028 252);
-    --status-gespraech: oklch(
+    --status-submitted-soft: oklch(var(--status-soft-l) 0.028 252);
+    --status-interview: oklch(
       var(--status-ink-l) 0.112 70
     ); /* Gespräch · bernstein */
-    --status-gespraech-soft: oklch(var(--status-soft-l) 0.04 70);
-    --status-angebot: oklch(var(--status-ink-l) 0.128 158); /* Angebot · grün */
-    --status-angebot-soft: oklch(var(--status-soft-l) 0.038 158);
-    --status-absage: oklch(var(--status-ink-l) 0.15 22); /* Absage · rot */
-    --status-absage-soft: oklch(var(--status-soft-l) 0.028 22);
+    --status-interview-soft: oklch(var(--status-soft-l) 0.04 70);
+    --status-offer: oklch(var(--status-ink-l) 0.128 158); /* Angebot · grün */
+    --status-offer-soft: oklch(var(--status-soft-l) 0.038 158);
+    --status-rejected: oklch(var(--status-ink-l) 0.15 22); /* Absage · rot */
+    --status-rejected-soft: oklch(var(--status-soft-l) 0.028 22);
+
+    /* ─── Form & Maße ──────────────────────────────────────── */
+    --radius:    8px;
+    --radius-sm: 6px;
+    --radius-lg: 12px;
+    --shadow-lg: 0 24px 60px -28px rgba(20, 40, 30, 0.30);
 
     /** Dimensions */
     --page-max-width: 100rem;
