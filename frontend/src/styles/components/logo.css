@@ -13,6 +13,10 @@
 }
 
 .logo__img {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
   margin-inline-end: 0.75rem;
   background-color: var(--accent);
   color: white;
@@ -20,10 +24,9 @@
 }
 
 .logo__txt-highlight {
-  font-style: 1;
+  font-style: italic;
   line-height: inherit;
   color: var(--accent);
-  font-style: italic;
 }
 
 @container page-container (width > 768px) {

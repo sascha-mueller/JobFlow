@@ -6,7 +6,10 @@
 /** LAYOUT */
 @import "./styles/layouts/container.css";
 @import "./styles/layouts/header.css";
+@import "./styles/layouts/auth.css";
 
 /** COMPONENTS */
 @import "./styles/components/logo.css";
 @import "./styles/components/nav-sidebar.css";
+@import "./styles/components/form.css";
+@import "./styles/components/buttons.css";
