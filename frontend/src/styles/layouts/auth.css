@@ -1,0 +1,138 @@
+@layer components {
+  .auth-page {
+    @apply flex min-h-dvh items-center justify-center px-5 py-10;
+    background: var(--bg-canvas);
+  }
+
+  .auth-card {
+    @apply w-full;
+    max-width: 452px;
+    padding: 34px 36px 30px;
+    background: var(--surface);
+    border: var(--border-thickness) solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 18px 50px -34px rgba(20, 40, 30, 0.28);
+  }
+
+  .auth-card form {
+    margin-top: 1.5rem;
+  }
+
+  /* ── Tab-Schalter ─────────────────────────────────────── */
+
+  .auth-card__seg {
+    @apply grid grid-cols-2 gap-1 p-1 mt-6 mb-7;
+    background: var(--surface-muted);
+    border: var(--border-thickness) solid var(--border);
+    border-radius: var(--radius);
+  }
+
+  .auth-card__seg-btn {
+    @apply border-0 cursor-pointer bg-transparent text-sm font-bold py-2.5 px-2.5 transition-colors text-center;
+    color: var(--text-muted);
+    border-radius: calc(var(--radius) - 5px);
+    font-family: var(--f-sans);
+    letter-spacing: 0.005em;
+    text-decoration: none;
+  }
+
+  .auth-card__seg-btn:hover {
+    color: var(--text);
+  }
+
+  .auth-card__seg-btn--active {
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: 0 1px 2px rgba(20, 40, 30, 0.1), 0 0 0 1px var(--border);
+  }
+
+  /* ── Kopf ─────────────────────────────────────────────── */
+
+  .auth-card__heading {
+    @apply font-semibold;
+    font-size: 28px;
+    letter-spacing: -0.015em;
+    font-family: var(--f-serif);
+    color: var(--text);
+  }
+
+  .auth-card__sub {
+    @apply mt-2 leading-relaxed;
+    font-size: 15px;
+    color: var(--text-muted);
+  }
+
+  /* ── Namensgrid (Registrierung) ───────────────────────── */
+
+  .auth-card__names {
+    @apply grid grid-cols-2 gap-3.5;
+  }
+
+  /* ── Checkbox-Zeile ───────────────────────────────────── */
+
+  .auth-card__checkbox-row {
+    @apply flex cursor-pointer text-sm select-none;
+    gap: 0.5rem;
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+
+  .auth-card__checkbox {
+    display: grid;
+    place-items: center;
+    width: 18px;
+    height: 18px;
+    flex: none;
+    border-radius: 5px;
+    border: var(--border-thickness) solid var(--border-strong);
+    background: var(--surface);
+    transition: background 0.12s, border-color 0.12s;
+
+    &:hover {
+      border-color: var(--accent);
+      background: var(--accent-softer);
+    }
+  }
+
+  .auth-card__checkbox--checked {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+
+  /* ── Info-Box ─────────────────────────────────────────── */
+
+  .auth-card__note {
+    @apply flex gap-2.5 leading-relaxed mt-5;
+    font-size: 13px;
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    border: var(--border-thickness) solid var(--accent-line);
+    background: var(--accent-softer);
+    color: var(--accent-deep);
+  }
+
+  /* ── Fußzeile ─────────────────────────────────────────── */
+
+  .auth-card__footer {
+    @apply text-sm text-center mt-5;
+    color: var(--text-muted);
+  }
+
+  /* ── Responsive ───────────────────────────────────────── */
+
+  @media (max-width: 540px) {
+    .auth-page {
+      @apply px-3.5 py-6;
+    }
+
+    .auth-card {
+      padding: 26px 20px 24px;
+      border-radius: var(--radius);
+    }
+
+    .auth-card__names {
+      @apply grid-cols-1;
+    }
+  }
+}

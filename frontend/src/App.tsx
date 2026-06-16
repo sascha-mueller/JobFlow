@@ -1,15 +1,12 @@
-import { BrowserRouter, Routes, Route } from 'react-router'
-import { Toaster } from '@/components/ui/sonner'
+import { BrowserRouter } from "react-router";
+import { Toaster } from "@/components/ui/sonner";
+import AppRoutes from "@/routes";
 
-function App() {
+export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<div className="p-8 text-foreground">JobFlow</div>} />
-      </Routes>
+      <AppRoutes />
       <Toaster />
     </BrowserRouter>
-  )
+  );
 }
-
-export default App

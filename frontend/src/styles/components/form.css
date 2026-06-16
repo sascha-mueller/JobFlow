@@ -1,0 +1,167 @@
+@layer components {
+  /* ══ Variablen (scoped auf form-Element) ═════════════════ */
+
+  form {
+    --form-gap: 1.25rem;
+    --widget-gap: 0.25rem;
+
+    --label-color: var(--text);
+
+    --field-bg: var(--surface);
+    --field-color: var(--text);
+    --field-border-color: var(--border-strong);
+    --field-border-size: var(--border-thickness);
+    --field-border-radius: var(--radius-sm);
+    --field-padding: 0.5rem 0.75rem;
+
+    --field-bg-hover: var(--accent-softer);
+    --field-border-color-hover: var(--accent);
+    --field-shadow-focus: 0 0 0 3px var(--accent-softer);
+
+    --field-border-color-error: var(--status-rejected);
+    --field-bg-error: var(--status-rejected-soft);
+    --error-color: var(--status-rejected);
+  }
+
+  /* ══ Struktur ════════════════════════════════════════════ */
+
+  .formbody {
+    display: flex;
+    flex-direction: column;
+    gap: var(--form-gap);
+  }
+
+  .widget {
+    display: grid;
+    gap: var(--widget-gap);
+  }
+
+  .widget__label-row {
+    @apply flex items-center justify-between;
+  }
+
+  /* ══ Labels ══════════════════════════════════════════════ */
+
+  form label {
+    @apply text-sm font-semibold;
+    color: var(--label-color);
+  }
+
+  /* ══ Felder ══════════════════════════════════════════════ */
+
+  input,
+  select,
+  textarea {
+    padding: var(--field-padding);
+    color: var(--field-color);
+    background: var(--field-bg);
+    border: var(--field-border-size) solid var(--field-border-color);
+    border-radius: var(--field-border-radius);
+    font-family: var(--f-sans);
+    font-size: 0.875rem;
+    outline: none;
+    transition:
+      border-color 0.15s,
+      background 0.15s,
+      box-shadow 0.15s;
+
+    &::placeholder {
+      color: var(--text-faint);
+    }
+
+    &:hover {
+      --field-bg: var(--field-bg-hover);
+      --field-border-color: var(--field-border-color-hover);
+    }
+
+    &:focus-visible {
+      --field-border-color: var(--accent);
+      box-shadow: var(--field-shadow-focus);
+    }
+
+    &.error {
+      --field-border-color: var(--field-border-color-error);
+      --field-bg: var(--field-bg-error);
+    }
+  }
+
+  input:not([type="checkbox"], [type="radio"]),
+  select,
+  textarea {
+    width: 100%;
+  }
+
+  /* ══ Fehlermeldung ═══════════════════════════════════════ */
+
+  .error-message {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--error-color);
+  }
+
+  /* ══ Icon-Input ══════════════════════════════════════════ */
+
+  .input-wrap {
+    @apply relative flex items-center;
+  }
+
+  .input-icon {
+    @apply absolute left-3 pointer-events-none;
+    color: var(--text-faint);
+  }
+
+  .input--has-icon {
+    padding-left: 2.25rem;
+  }
+  .input--has-action {
+    padding-right: 5.5rem;
+  }
+
+  .input-action {
+    @apply absolute right-3 border-0 bg-transparent cursor-pointer;
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: var(--f-sans);
+    color: var(--text-faint);
+
+    &:hover {
+      color: var(--text-muted);
+    }
+  }
+
+  /* ══ Passwort-Stärke ═════════════════════════════════════ */
+
+  .pw-strength {
+    @apply flex items-center gap-2 mt-1;
+  }
+
+  .pw-bars {
+    @apply flex gap-1 flex-1;
+  }
+
+  .pw-bar {
+    @apply flex-1 rounded-full;
+    height: 3px;
+    background: var(--border-strong);
+    transition: background 0.2s;
+  }
+
+  .pw-bar--weak {
+    background: var(--status-rejected);
+  }
+  .pw-bar--ok {
+    background: var(--status-interview);
+  }
+  .pw-bar--strong {
+    background: var(--accent);
+  }
+
+  .pw-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: right;
+    width: 3rem;
+    color: var(--text-faint);
+  }
+
+}

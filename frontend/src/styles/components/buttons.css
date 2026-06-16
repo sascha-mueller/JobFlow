@@ -1,0 +1,58 @@
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    font-weight: 700;
+    font-family: var(--f-sans);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    transition:
+      background 0.15s,
+      color 0.15s,
+      border-color 0.15s;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  .btn--primary {
+    width: 100%;
+    padding: 0.625rem 1rem;
+    background: var(--accent);
+    color: var(--on-accent);
+
+    &:hover:not(:disabled) {
+      background: var(--accent-strong);
+    }
+  }
+
+  .btn--secondary {
+    padding: 0.5rem 1rem;
+    background: transparent;
+    border: var(--border-thickness) solid var(--border-strong);
+    color: var(--text);
+
+    &:hover:not(:disabled) {
+      background: var(--surface-muted);
+    }
+  }
+
+  .btn--text {
+    padding: 0;
+    background: transparent;
+    font-size: inherit;
+    font-weight: 700;
+    color: var(--accent-strong);
+
+    &:hover,
+    &:focus-visible {
+      text-decoration: underline;
+    }
+  }
+}

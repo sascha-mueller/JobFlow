@@ -1,0 +1,36 @@
+.logo {
+  display: none;
+}
+
+.logo__link {
+  display: flex;
+  align-items: center;
+
+  font-family: var(--f-serif);
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.logo__img {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin-inline-end: 0.75rem;
+  background-color: var(--accent);
+  color: white;
+  border-radius: var(--radius-sm);
+}
+
+.logo__txt-highlight {
+  font-style: italic;
+  line-height: inherit;
+  color: var(--accent);
+}
+
+@container page-container (width > 768px) {
+  .logo {
+    display: block;
+  }
+}
