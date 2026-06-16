@@ -34,6 +34,10 @@ const envZodSchema = z.object({
         .map((type) => type.trim().toUpperCase())
         .filter(Boolean),
     ),
+
+  CLOUDINARY_NAME: z.string().min(8),
+  CLOUDINARY_KEY: z.string().min(8),
+  CLOUDINARY_SECRET: z.string().min(16),
 });
 
 const parsedEnv = envZodSchema.safeParse(process.env);
@@ -60,4 +64,7 @@ export const {
   LOG_LEVEL,
   FILE_SIZE,
   FILE_TYPE,
+  CLOUDINARY_NAME,
+  CLOUDINARY_KEY,
+  CLOUDINARY_SECRET
 } = parsedEnv.data;
