@@ -1,11 +1,7 @@
 {
-  "extends": "../tsconfig.base.json",
-  "compilerOptions": {
-    "noEmit": true,
-    "module": "preserve",
-    "moduleResolution": "bundler",
-    "jsx": "react-jsx",
-    "lib": ["ESNext", "DOM", "DOM.Iterable"]
-  },
-  "include": ["src"]
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
 }
