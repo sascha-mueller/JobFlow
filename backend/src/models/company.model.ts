@@ -15,9 +15,9 @@ const companySchema = new Schema<CompanyDocument>(
     website: String,
     notes: String,
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-companySchema.index({ user: 1 });
+companySchema.index({ user: 1, name: 1 }, { unique: true });
 
 export const Company = model<CompanyDocument>("Company", companySchema);

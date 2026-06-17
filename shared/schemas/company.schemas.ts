@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { objectIdSchema } from "./common/objectId.schema.ts";
 
 export const createCompanySchema = z.object({
   name: z.string().min(3),
@@ -13,3 +14,7 @@ export const updateCompanySchema = createCompanySchema.partial();
 
 export type CreateCompanyInput = z.infer<typeof createCompanySchema>;
 export type UpdateCompanyInput = z.infer<typeof updateCompanySchema>;
+
+export const companyIdParamsSchema = z.object({
+  id: objectIdSchema,
+});

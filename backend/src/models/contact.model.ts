@@ -10,15 +10,16 @@ type ContactDocument = Omit<CreateContactInput, "company"> & {
 const contactSchema = new Schema<ContactDocument>(
   {
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    name: { type: String, required: true },
-    email: String,
+    name: String,
+    email: { type: String, required: true, unique: true },
     phone: String,
     company: { type: Schema.Types.ObjectId, ref: "Company" },
     linkedIn: String,
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
+contactSchema.index({ email: 1 }, { unique: true });
 contactSchema.index({ user: 1 });
 contactSchema.index({ user: 1, company: 1 });
 

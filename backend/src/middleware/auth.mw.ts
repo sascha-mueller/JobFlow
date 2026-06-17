@@ -5,9 +5,10 @@ import { parseAccessToken } from "../services/index.ts";
 
 export const authToken: RequestHandler = (req, _res, next) => {
   try {
-    const token =
-      req.cookies?.accessToken ??
-      req.headers.authorization?.replace("Bearer ", "");
+    const authHeader = req.headers.authorization;
+    const token = authHeader?.startsWith("Bearer ")
+      ? authHeader.split(" ")[1]
+      : req.cookies?.accessToken;
 
     if (!token) {
       throw new AppError(401, "Missing access token", "NO_TOKEN", "WARN");
