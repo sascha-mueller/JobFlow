@@ -153,7 +153,7 @@ export default function RegistrationForm() {
             )}
           </div>
 
-          <label className="auth-card__checkbox-row">
+          <label className="checkbox-row">
             <span
               className={`auth-card__checkbox${agreeTerms ? " auth-card__checkbox--checked" : ""}`}
               aria-hidden="true"
@@ -169,10 +169,7 @@ export default function RegistrationForm() {
                 if (e.target.checked) setTermsError("");
               }}
             />
-            Ich akzeptiere die{" "}
-            <Link to="/agb" className="btn btn--text">AGB</Link>
-            {" "}und die{" "}
-            <Link to="/datenschutz" className="btn btn--text">Datenschutzerklärung</Link>.
+            <span>Ich akzeptiere die <Link to="/agb" className="btn btn--text">AGB</Link> und die <Link to="/datenschutz" className="btn btn--text">Datenschutzerklärung</Link>.</span>
           </label>
           {termsError && <span className="error-message">{termsError}</span>}
 
