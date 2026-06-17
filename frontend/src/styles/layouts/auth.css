@@ -70,9 +70,8 @@
 
   /* ── Checkbox-Zeile ───────────────────────────────────── */
 
-  .auth-card__checkbox-row {
+  .checkbox-row {
     @apply flex cursor-pointer text-sm select-none;
-    gap: 0.5rem;
     font-weight: 400;
     color: var(--text-muted);
   }
@@ -83,6 +82,7 @@
     width: 18px;
     height: 18px;
     flex: none;
+    margin-inline-end: 0.5rem;
     border-radius: 5px;
     border: var(--border-thickness) solid var(--border-strong);
     background: var(--surface);

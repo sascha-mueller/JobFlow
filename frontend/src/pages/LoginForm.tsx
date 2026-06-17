@@ -86,7 +86,7 @@ export default function LoginForm() {
             )}
           </div>
 
-          <label className="auth-card__checkbox-row">
+          <label className="checkbox-row">
             <span
               className={`auth-card__checkbox${rememberMe ? " auth-card__checkbox--checked" : ""}`}
               aria-hidden="true"
