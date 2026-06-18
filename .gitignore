@@ -3,6 +3,7 @@ dist/
 .env
 
 backend/uploads/
+backend/logs/
 
 docs/*
 !docs/elevator-pitch.md
