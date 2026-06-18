@@ -1,7 +1,21 @@
 @baseUrl = http://localhost:3001/api
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3ODEyMTMzMDEsImV4cCI6MTc4MTI5OTcwMSwic3ViIjoiNmEyOWU0Y2EzOWJjOThhMjk4NGMwMWMzIn0.P0dHGDSqL54_fK0UfMTEPgX-2Mh7CbosJJITW1VC8MY
-@companyAId = 6a2b105bf0e70d96b21cfbaa
-@companyBId = 6a2b10f6f0e70d96b21cfbad
+@userId = 6a3450cbb6ac0ba62ec6e3bd
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3ODE4MTM0NTEsImV4cCI6MTc4MTg5OTg1MSwic3ViIjoiNmEzNDUwY2JiNmFjMGJhNjJlYzZlM2JkIn0.s-hmnERK7lblYS3Ry5HXW4uV4qnhcpnKHhfjBN_IqfU
+@companyAId = 6a345158b6ac0ba62ec6e3c1
+@companyBId = 6a345185b6ac0ba62ec6e3c4
+
+
+
+### User login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "app-test@example.com",
+  "password": "Password123!"
+}
+
+
 
 ### GET companies
 GET {{baseUrl}}/companies

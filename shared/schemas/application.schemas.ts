@@ -3,12 +3,13 @@ import {
   ApplicationStatus,
   WorkMode,
 } from "../constants/application.constants.ts";
+import { objectIdSchema } from "./common/objectId.schema.ts";
 
 export const createApplicationSchema = z.object({
-  name: z.string().min(3),
+  name: z.string().min(3).trim(),
   description: z.string().optional(),
-  salaryMin: z.number().optional(),
-  salaryMax: z.number().optional(),
+  salaryMin: z.number().nonnegative().optional(),
+  salaryMax: z.number().nonnegative().optional(),
   link: z.url().optional(),
   isFavorite: z.boolean().default(false),
   status: ApplicationStatus,
@@ -26,3 +27,7 @@ export const updateApplicationSchema = createApplicationSchema.partial();
 
 export type CreateApplicationInput = z.infer<typeof createApplicationSchema>;
 export type UpdateApplicationInput = z.infer<typeof updateApplicationSchema>;
+
+export const appIdParamsSchema = z.object({
+  id: objectIdSchema,
+});

@@ -1,0 +1,139 @@
+@baseUrl = http://localhost:3001/api
+@userId = 6a3450cbb6ac0ba62ec6e3bd
+@appId = 6a3458f09d70213273ae0ab8
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3ODE4MTUxOTUsImV4cCI6MTc4MTkwMTU5NSwic3ViIjoiNmEzNDUwY2JiNmFjMGJhNjJlYzZlM2JkIn0.XkKEzT9EJRog2EOB9AT6iZSgdVRJke3Jf0kdG98_8sM
+@companyId = 6a345158b6ac0ba62ec6e3c1
+@contactId = 6a3456d29d70213273ae0aa5
+
+
+
+### User login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "app-test@example.com",
+  "password": "Password123!"
+}
+
+
+
+### Create Application
+POST {{baseUrl}}/apps
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Backend Developer Alpha",
+  "description": "Application test with company and contact",
+  "salaryMin": 45000,
+  "salaryMax": 60000,
+  "link": "https://example.com/jobs/backend-developer",
+  "isFavorite": true,
+  "status": "WATCHLIST",
+  "company": "{{companyId}}",
+  "contact": "{{contactId}}",
+  "workLocation": "Essen",
+  "workMode": "HYBRID",
+  "appliedAt": "2026-06-18",
+  "deadline": "2026-07-01",
+  "followUpAt": "2026-06-25",
+  "notes": "Created during Application CRUD test"
+}
+
+### Invalid Status
+POST {{baseUrl}}/apps
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "Java Developer",
+  "status": "INVALID"
+}
+
+### Invalid companyId
+POST {{baseUrl}}/apps
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "SAP Developer",
+  "status": "WATCHLIST",
+  "company": "666666666666666666666666"
+}
+
+### Invalid contactId
+POST {{baseUrl}}/apps
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "name": "SAP Developer",
+  "status": "WATCHLIST",
+  "contact": "666666666666666666666666"
+}
+
+### Get Apps
+GET {{baseUrl}}/apps
+Authorization: Bearer {{accessToken}}
+
+### Get Application By Id
+GET {{baseUrl}}/apps/{{appId}}
+Authorization: Bearer {{accessToken}}
+
+### Invalid appId
+GET {{baseUrl}}/apps/666666666666666666666666
+Authorization: Bearer {{accessToken}}
+
+GET {{baseUrl}}/apps/abc
+Authorization: Bearer {{accessToken}}
+
+### Update Application
+### Update status
+PATCH {{baseUrl}}/apps/{{appId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "status": "INTERVIEW"
+}
+
+### Update isFavorite
+PATCH {{baseUrl}}/apps/{{appId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "isFavorite": true
+}
+
+### Update companyId (invalid)
+PATCH {{baseUrl}}/apps/{{appId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "company": "666666666666666666666666"
+}
+
+### Update contactId (invalid)
+PATCH {{baseUrl}}/apps/{{appId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "contact": "666666666666666666666666"
+}
+
+# application
+PATCH {{baseUrl}}/apps/666666666666666666666666
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "status": "INTERVIEW"
+}
+
+### Delete Application
+DELETE {{baseUrl}}/apps/{{appId}}
+Authorization: Bearer {{accessToken}}

@@ -4,6 +4,17 @@
 
 
 
+### User login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "auth-sys@example.com",
+  "password": "Password123!"
+}
+
+
+
 ### Create Profile
 POST {{baseUrl}}/profiles
 Authorization: Bearer {{accessToken}}
@@ -73,10 +84,10 @@ Content-Disposition: form-data; name="type"
 
 CV
 --boundary
-Content-Disposition: form-data; name="file"; filename="test.pdf"
+Content-Disposition: form-data; name="file"; filename="test-cloud.pdf"
 Content-Type: application/pdf
 
-< ../logs/test.pdf
+< ../logs/test-cloud.pdf
 --boundary--
 
 
@@ -91,8 +102,8 @@ Content-Disposition: form-data; name="type"
 
 PHOTO
 --boundary
-Content-Disposition: form-data; name="file"; filename="test.png"
+Content-Disposition: form-data; name="file"; filename="test-cloud.png"
 Content-Type: image/jpeg
 
-< ../logs/test.png
+< ../logs/test-cloud.png
 --boundary--

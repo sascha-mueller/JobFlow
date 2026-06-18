@@ -1,6 +1,6 @@
 @baseUrl = http://localhost:3001/api
-@userId = 6a2f3a7716b248a769867d39
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3ODE1NjM2NTUsImV4cCI6MTc4MTY1MDA1NSwic3ViIjoiNmEyOWU0Y2EzOWJjOThhMjk4NGMwMWMzIn0.fXOK_X2TqGu2tJO0xk5hrNPoCdtU3iz64ZsGpnrNb80
+@userId = 6a3450cbb6ac0ba62ec6e3bd
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3ODE4MTM0NTEsImV4cCI6MTc4MTg5OTg1MSwic3ViIjoiNmEzNDUwY2JiNmFjMGJhNjJlYzZlM2JkIn0.s-hmnERK7lblYS3Ry5HXW4uV4qnhcpnKHhfjBN_IqfU
 
 
 
@@ -9,7 +9,7 @@ POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-  "email": "auth-sys@example.delete",
+  "email": "app-test@example.com",
   "password": "Password123!"
 }
 
@@ -18,7 +18,7 @@ POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-  "email": "auth-sys@example.com",
+  "email": "app-test@example.com",
   "password": "Password123!"
 }
 

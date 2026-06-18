@@ -1,13 +1,6 @@
 import type { RequestHandler } from "express";
-import type { JwtPayload } from "jsonwebtoken";
 
-import { AppError } from "../utils/index.ts";
-import {
-  assertUserExists,
-  getCookieOpts,
-  verifyToken,
-} from "../services/index.ts";
-import { REFRESH_JWT_SECRET } from "../config/index.ts";
+import { assertUserExists, getCookieOpts } from "../services/index.ts";
 
 export const getUser: RequestHandler = async (req, res, next) => {
   try {

@@ -2,8 +2,10 @@ import { Schema, model, Types } from "mongoose";
 import { ApplicationStatus, WorkMode } from "@jobflow/shared";
 import type { CreateApplicationInput } from "@jobflow/shared";
 
+// cSpell:disable
 // company/contact: string im Zod-Type → ObjectId in der DB
 // Datumsfelder: ISO-String vom Client → Date in der DB
+// cSpell:enable
 type ApplicationDocument = Omit<
   CreateApplicationInput,
   "company" | "contact" | "appliedAt" | "deadline" | "followUpAt"
@@ -25,6 +27,8 @@ const applicationSchema = new Schema<ApplicationDocument>(
     salaryMax: Number,
     link: String,
     isFavorite: { type: Boolean, default: false },
+
+    // cSpell:disable-next-line
     // .options liefert das string-Array des Zod-Enums — keine manuelle Dopplung
     status: { type: String, enum: ApplicationStatus.options, required: true },
     company: { type: Schema.Types.ObjectId, ref: "Company" },
@@ -36,15 +40,16 @@ const applicationSchema = new Schema<ApplicationDocument>(
     followUpAt: Date,
     notes: String,
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 applicationSchema.index({ user: 1, createdAt: -1 });
 applicationSchema.index({ user: 1, status: 1 });
 applicationSchema.index({ user: 1, isFavorite: 1 });
 applicationSchema.index({ user: 1, followUpAt: 1 });
+applicationSchema.index({ user: 1, company: 1 });
 
 export const Application = model<ApplicationDocument>(
   "Application",
-  applicationSchema
+  applicationSchema,
 );

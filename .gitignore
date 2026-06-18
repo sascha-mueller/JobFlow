@@ -6,3 +6,6 @@ backend/uploads/
 
 docs/*
 !docs/elevator-pitch.md
+
+files
+logs
