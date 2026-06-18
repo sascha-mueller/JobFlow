@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Check, Lock, Mail, Sparkles } from "lucide-react";
+import { Check, Lock, Mail } from "lucide-react";
 import Logo from "@/components/ui/Logo";
 import { useAuthStore } from "@/stores/auth.store";
 
@@ -117,13 +117,6 @@ export default function LoginForm() {
             {isSubmitting ? "Anmelden …" : "Anmelden"}
           </button>
         </form>
-
-        <aside className="auth-card__note">
-          <Sparkles size={15} style={{ flexShrink: 0, marginTop: 1 }} />
-          <span>
-            <strong>Demo:</strong> Zugangsdaten eintragen und auf „Anmelden" klicken.
-          </span>
-        </aside>
 
         <p className="auth-card__footer">
           Noch kein Konto?{" "}
