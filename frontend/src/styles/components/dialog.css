@@ -1,0 +1,30 @@
+@layer components {
+  .dialog-close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: var(--radius-sm);
+    border: var(--border-thickness) solid transparent;
+    background: transparent;
+    color: var(--text-faint);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+
+    &:hover {
+      background: var(--surface-muted);
+      color: var(--text);
+      border-color: var(--border-strong);
+    }
+
+    &:focus-visible {
+      outline: none;
+      background: var(--surface-muted);
+      color: var(--text);
+      box-shadow: 0 0 0 3px var(--accent-softer);
+    }
+  }
+}

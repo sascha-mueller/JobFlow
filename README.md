@@ -57,10 +57,9 @@ flowchart LR
 Das Projekt ist als **pnpm-Monorepo** mit drei Packages aufgebaut:
 
 ```
-packages/
-├── shared/    # Zod-Schemas, TypeScript-Types, Konstanten
-├── backend/   # Express 5 REST API
-└── frontend/  # React 19 SPA, Vite, shadcn/ui, Zod, TypeScript
+shared/    # Zod-Schemas, TypeScript-Types, Konstanten
+backend/   # Express 5 REST API
+frontend/  # React 19 SPA, Vite, shadcn/ui, Zod, TypeScript
 ```
 
 Das `shared`-Package ist der gemeinsame Vertrag zwischen Backend und Frontend: Zod-Schemas werden einmal definiert und auf beiden Seiten verwendet — für die Formularvalidierung im Browser und für die Request-Validierung auf dem Server. Kein Build-Schritt nötig, beide Consumer lesen TypeScript-Source direkt.
@@ -88,8 +87,7 @@ pnpm install
 ### Umgebungsvariablen
 
 ```bash
-cp packages/backend/.env.example packages/backend/.env
-cp packages/frontend/.env.example packages/frontend/.env
+cp backend/.env.example backend/.env
 ```
 
 ### Starten

@@ -3,9 +3,15 @@ dist/
 .env
 
 backend/uploads/
+backend/logs/
 
 docs/*
 !docs/elevator-pitch.md
+<<<<<<< HEAD
 
 files
 logs
+||||||| 01c6a3d
+=======
+!docs/styleguide.html
+>>>>>>> origin

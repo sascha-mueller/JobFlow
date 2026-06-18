@@ -1,0 +1,133 @@
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.005em;
+    font-family: var(--f-sans);
+    border: var(--border-thickness) solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    user-select: none;
+    transition:
+      background 0.15s,
+      border-color 0.15s,
+      transform 0.06s,
+      color 0.15s;
+
+    &:active:not(:disabled) {
+      transform: translateY(0.5px);
+    }
+    & svg {
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+
+  /* Primary — grün, Großbuchstaben */
+  .btn-primary {
+    background: var(--accent);
+    color: var(--on-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+
+    &:hover:not(:disabled),
+    &:focus-visible:not(:disabled) {
+      background: var(--accent-strong);
+    }
+  }
+
+  /* Ghost — umrandet */
+  .btn-ghost {
+    background: var(--surface);
+    color: var(--text);
+    border-color: var(--border-strong);
+
+    &:hover:not(:disabled),
+    &:focus-visible:not(:disabled) {
+      background: var(--surface-muted);
+      border-color: var(--text-faint);
+    }
+  }
+
+  /* Soft — gedämpfte Füllung */
+  .btn-soft {
+    background: var(--surface-muted);
+    color: var(--text);
+
+    &:hover:not(:disabled),
+    &:focus-visible:not(:disabled) {
+      background: var(--surface-sunken);
+    }
+  }
+
+  /* Quiet — transparent */
+  .btn-quiet {
+    background: transparent;
+    color: var(--text-muted);
+
+    &:hover:not(:disabled),
+    &:focus-visible:not(:disabled) {
+      background: var(--surface-muted);
+      color: var(--text);
+    }
+  }
+
+  /* Text — inline Akzent-Link (Formulare) */
+  .btn-text {
+    padding: 0;
+    background: transparent;
+    font-size: inherit;
+    font-weight: 700;
+    color: var(--accent-strong);
+    border: none;
+
+    &:hover:not(:disabled),
+    &:focus-visible:not(:disabled) {
+      text-decoration: underline;
+    }
+  }
+
+  /* Klein */
+  .btn-sm {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  .btn-icon {
+    padding: 10px;
+    justify-content: center;
+  }
+  .btn-icon.btn-sm {
+    padding: 6px;
+  }
+
+  /* Volle Breite — für Formular-Submits */
+  .btn-block {
+    width: 100%;
+    justify-content: center;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  /* Disabled — gilt für alle Varianten.
+     Spezifizität .btn:disabled (0,1,1) schlägt .btn-primary etc. (0,1,0),
+     daher kein !important nötig. */
+  .btn:disabled {
+    background: var(--surface-muted);
+    color: var(--text-faint);
+    border-color: var(--border);
+    cursor: not-allowed;
+  }
+
+  /* Text-Buttons haben keinen Hintergrund, auch nicht im disabled-Zustand */
+  .btn-text:disabled {
+    background: transparent;
+    border-color: transparent;
+    color: var(--text-faint);
+  }
+}
