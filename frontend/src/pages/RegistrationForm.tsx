@@ -178,19 +178,19 @@ export default function RegistrationForm() {
                 if (e.target.checked) setTermsError("");
               }}
             />
-            <span>Ich akzeptiere die <Link to="/agb" className="btn btn--text">AGB</Link> und die <Link to="/datenschutz" className="btn btn--text">Datenschutzerklärung</Link>.</span>
+            <span>Ich akzeptiere die <Link to="/agb" className="btn btn-text">AGB</Link> und die <Link to="/datenschutz" className="btn btn-text">Datenschutzerklärung</Link>.</span>
           </label>
           {termsError && <span className="error-message">{termsError}</span>}
           {serverError && <span className="error-message">{serverError}</span>}
 
-          <button type="submit" className="btn btn--primary" disabled={isSubmitting}>
+          <button type="submit" className="btn btn-primary btn-block" disabled={isSubmitting}>
             {isSubmitting ? "Konto wird erstellt …" : "Konto erstellen"}
           </button>
         </form>
 
         <p className="auth-card__footer">
           Schon registriert?{" "}
-          <Link to="/login" className="btn btn--text">Zur Anmeldung</Link>
+          <Link to="/login" className="btn btn-text">Zur Anmeldung</Link>
         </p>
       </div>
     </div>

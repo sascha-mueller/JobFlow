@@ -7,6 +7,7 @@ import LoginPage from "@/pages/LoginForm";
 import RegistrationPage from "@/pages/RegistrationForm";
 import Dashboard from "@/pages/Dashboard";
 import CompaniesPage from "@/pages/Companies";
+import CompanyDetail from "@/pages/CompanyDetail";
 
 export default function AppRoutes() {
   return (
@@ -14,7 +15,8 @@ export default function AppRoutes() {
       <Route element={<PrivateRoute />}>
         <Route element={<AppLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/companies" element={<CompaniesPage />} />
+          <Route path="/firmen" element={<CompaniesPage />} />
+          <Route path="/firmen/:id" element={<CompanyDetail />} />
         </Route>
       </Route>
 

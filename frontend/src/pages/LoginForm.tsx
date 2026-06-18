@@ -71,7 +71,7 @@ export default function LoginForm() {
           <div className="widget">
             <div className="widget__label-row">
               <label>Passwort</label>
-              <button type="button" className="btn btn--text">Vergessen?</button>
+              <button type="button" className="btn btn-text">Vergessen?</button>
             </div>
             <div className="input-wrap">
               <Lock size={16} className="input-icon" />
@@ -113,14 +113,14 @@ export default function LoginForm() {
 
           {serverError && <span className="error-message">{serverError}</span>}
 
-          <button type="submit" className="btn btn--primary" disabled={isSubmitting}>
+          <button type="submit" className="btn btn-primary btn-block" disabled={isSubmitting}>
             {isSubmitting ? "Anmelden …" : "Anmelden"}
           </button>
         </form>
 
         <p className="auth-card__footer">
           Noch kein Konto?{" "}
-          <Link to="/registration" className="btn btn--text">Jetzt registrieren</Link>
+          <Link to="/registration" className="btn btn-text">Jetzt registrieren</Link>
         </p>
       </div>
     </div>

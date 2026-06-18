@@ -8,8 +8,13 @@
 @import "./styles/layouts/header.css";
 @import "./styles/layouts/auth.css";
 
+/** PAGES */
+@import "./styles/pages/companies.css";
+@import "./styles/pages/company-detail.css";
+
 /** COMPONENTS */
 @import "./styles/components/logo.css";
 @import "./styles/components/nav-sidebar.css";
 @import "./styles/components/form.css";
 @import "./styles/components/buttons.css";
+@import "./styles/components/dialog.css";

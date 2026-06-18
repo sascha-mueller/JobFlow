@@ -1,10 +1,22 @@
 import { create } from "zustand";
 
+export interface PageAction {
+  label: string;
+  onClick: () => void;
+}
+
+export interface PageBackLink {
+  label: string;
+  href: string;
+}
+
 interface PageMeta {
   title: string;
   subtitle: string;
   metaTitle: string;
   metaDescription: string;
+  action?: PageAction;
+  backLink?: PageBackLink;
 }
 
 interface UiStore {
@@ -22,5 +34,7 @@ const defaults: PageMeta = {
 export const useUiStore = create<UiStore>((set) => ({
   pageMeta: defaults,
   setPageMeta: (meta) =>
-    set((state) => ({ pageMeta: { ...state.pageMeta, ...meta } })),
+    set((state) => ({
+      pageMeta: { ...state.pageMeta, action: undefined, backLink: undefined, ...meta },
+    })),
 }));
