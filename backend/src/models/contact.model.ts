@@ -19,8 +19,8 @@ const contactSchema = new Schema<ContactDocument>(
   { timestamps: true },
 );
 
-contactSchema.index({ email: 1 }, { unique: true });
 contactSchema.index({ user: 1 });
 contactSchema.index({ user: 1, company: 1 });
+contactSchema.index({ user: 1, email: 1 }, { unique: true });
 
 export const Contact = model<ContactDocument>("Contact", contactSchema);
