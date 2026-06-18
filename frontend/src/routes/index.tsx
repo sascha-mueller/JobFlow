@@ -11,9 +11,11 @@ import CompaniesPage from "@/pages/Companies";
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route element={<AppLayout />}>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/companies" element={<CompaniesPage />} />
+      <Route element={<PrivateRoute />}>
+        <Route element={<AppLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/companies" element={<CompaniesPage />} />
+        </Route>
       </Route>
 
       <Route element={<AuthLayout />}>

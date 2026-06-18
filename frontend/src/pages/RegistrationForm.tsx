@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Check, Lock, Mail } from "lucide-react";
 import Logo from "@/components/ui/Logo";
+import { useAuthStore } from "@/stores/auth.store";
 
 const schema = z.object({
   firstName: z.string().min(1, "Pflichtfeld"),
@@ -35,9 +36,11 @@ function barModifier(index: number, score: number) {
 
 export default function RegistrationForm() {
   const navigate = useNavigate();
+  const registerUser = useAuthStore((s) => s.register);
   const [showPassword, setShowPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [termsError, setTermsError] = useState("");
+  const [serverError, setServerError] = useState("");
 
   const {
     register,
@@ -49,13 +52,19 @@ export default function RegistrationForm() {
   const password = watch("password", "");
   const score = pwScore(password);
 
-  const onSubmit = async (_data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     if (!agreeTerms) {
       setTermsError("Bitte zustimmen.");
       return;
     }
     setTermsError("");
-    navigate("/dashboard");
+    try {
+      setServerError("");
+      await registerUser(data.email, data.password, data.firstName, data.lastName);
+      navigate("/dashboard");
+    } catch (err) {
+      setServerError(err instanceof Error ? err.message : "Registrierung fehlgeschlagen");
+    }
   };
 
   return (
@@ -172,6 +181,7 @@ export default function RegistrationForm() {
             <span>Ich akzeptiere die <Link to="/agb" className="btn btn--text">AGB</Link> und die <Link to="/datenschutz" className="btn btn--text">Datenschutzerklärung</Link>.</span>
           </label>
           {termsError && <span className="error-message">{termsError}</span>}
+          {serverError && <span className="error-message">{serverError}</span>}
 
           <button type="submit" className="btn btn--primary" disabled={isSubmitting}>
             {isSubmitting ? "Konto wird erstellt …" : "Konto erstellen"}
