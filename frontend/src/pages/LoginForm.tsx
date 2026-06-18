@@ -3,8 +3,9 @@ import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Check, Lock, Mail, Sparkles } from "lucide-react";
+import { Check, Lock, Mail } from "lucide-react";
 import Logo from "@/components/ui/Logo";
+import { useAuthStore } from "@/stores/auth.store";
 
 const schema = z.object({
   email: z.email("Bitte gültige E-Mail eingeben."),
@@ -15,8 +16,10 @@ type FormData = z.infer<typeof schema>;
 
 export default function LoginForm() {
   const navigate = useNavigate();
+  const login = useAuthStore((s) => s.login);
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [serverError, setServerError] = useState("");
 
   const {
     register,
@@ -24,8 +27,14 @@ export default function LoginForm() {
     formState: { errors, isSubmitting },
   } = useForm<FormData>({ resolver: zodResolver(schema) });
 
-  const onSubmit = async (_data: FormData) => {
-    navigate("/dashboard");
+  const onSubmit = async (data: FormData) => {
+    try {
+      setServerError("");
+      await login(data.email, data.password);
+      navigate("/dashboard");
+    } catch (err) {
+      setServerError(err instanceof Error ? err.message : "Login fehlgeschlagen");
+    }
   };
 
   return (
@@ -102,17 +111,12 @@ export default function LoginForm() {
             Angemeldet bleiben
           </label>
 
+          {serverError && <span className="error-message">{serverError}</span>}
+
           <button type="submit" className="btn btn--primary" disabled={isSubmitting}>
             {isSubmitting ? "Anmelden …" : "Anmelden"}
           </button>
         </form>
-
-        <aside className="auth-card__note">
-          <Sparkles size={15} style={{ flexShrink: 0, marginTop: 1 }} />
-          <span>
-            <strong>Demo:</strong> Zugangsdaten eintragen und auf „Anmelden" klicken.
-          </span>
-        </aside>
 
         <p className="auth-card__footer">
           Noch kein Konto?{" "}

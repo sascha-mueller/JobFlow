@@ -1,5 +1,6 @@
 import { Building2, ListChecks, LogOut, UserRound } from "lucide-react";
 import { NavLink } from "react-router";
+import { useAuthStore } from "@/stores/auth.store";
 
 const NAV_ITEMS = [
   { to: "/dashboard", label: "Dashboard", Icon: ListChecks },
@@ -8,6 +9,8 @@ const NAV_ITEMS = [
 ];
 
 const NavSidebar = () => {
+  const logout = useAuthStore((s) => s.logout);
+
   return (
     <nav className="nav-sidebar">
       <span className="nav-sidebar__title">Menü</span>
@@ -21,7 +24,7 @@ const NavSidebar = () => {
           </li>
         ))}
       </ul>
-      <button className="nav-sidebar__logout" type="button">
+      <button className="nav-sidebar__logout" type="button" onClick={logout}>
         <LogOut size={18} aria-hidden="true" />
         Abmelden
       </button>

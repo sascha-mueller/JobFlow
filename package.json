@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "pnpm --parallel -r run dev",
     "test": "pnpm -r run test",
-    "typecheck": "pnpm -r run typecheck"
+    "typecheck": "pnpm -r run typecheck",
+    "gen:secret": "node --input-type=module -e \"import {randomBytes} from 'crypto'; console.log(randomBytes(64).toString('hex'));\""
   }
 }
