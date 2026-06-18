@@ -12,7 +12,7 @@ export default function PageNotFound() {
         <p className="auth-card__sub">
           Die gesuchte Seite existiert nicht oder wurde verschoben.
         </p>
-        <Link to="/dashboard" className="btn btn--primary" style={{ display: "block", marginTop: "1.5rem", textAlign: "center", textDecoration: "none" }}>
+        <Link to="/dashboard" className="btn btn-primary btn-block" style={{ display: "block", marginTop: "1.5rem", textAlign: "center", textDecoration: "none" }}>
           Zur Übersicht
         </Link>
       </div>

@@ -17,3 +17,10 @@ export type UpdateContactInput = z.infer<typeof updateContactSchema>;
 export const contactIdParamsSchema = z.object({
   id: objectIdSchema,
 });
+
+export type Contact = CreateContactInput & {
+  _id: string;
+  user: string;
+  createdAt: string;
+  updatedAt: string;
+};
