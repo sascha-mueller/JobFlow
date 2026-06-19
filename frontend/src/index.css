@@ -16,6 +16,7 @@
 /** COMPONENTS */
 @import "./styles/components/logo.css";
 @import "./styles/components/nav-sidebar.css";
+@import "./styles/components/typo.css";
 @import "./styles/components/form.css";
 @import "./styles/components/buttons.css";
 @import "./styles/components/dialog.css";
