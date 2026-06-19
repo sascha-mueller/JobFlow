@@ -6,6 +6,7 @@ export const createContactSchema = z.object({
   email: z.email(),
   phone: z.string().optional(),
   company: z.string().optional(), // MongoDB ObjectId als String vom Client
+  position: z.string().optional(),
   linkedIn: z
     .string()
     .transform((v) => (/^https?:\/\//i.test(v) ? v : `https://${v}`))

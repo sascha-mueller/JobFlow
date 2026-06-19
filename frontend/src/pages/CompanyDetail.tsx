@@ -153,6 +153,9 @@ function ContactsPanel({
               </span>
               <div className="cd-contact-info">
                 <p className="cd-contact-name">{contact.name}</p>
+                {contact.position && (
+                  <p className="cd-contact-position">{contact.position}</p>
+                )}
                 <div className="cd-contact-links">
                   <a
                     href={`mailto:${contact.email}`}
@@ -168,6 +171,17 @@ function ContactsPanel({
                     >
                       <Phone size={12} />
                       {contact.phone}
+                    </a>
+                  )}
+                  {contact.linkedIn && (
+                    <a
+                      href={contact.linkedIn}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="cd-contact-link"
+                    >
+                      <ExternalLink size={12} />
+                      LinkedIn
                     </a>
                   )}
                 </div>
@@ -277,6 +291,20 @@ function AddContactDialog({
 
           <div className="company-dialog__row">
             <div className="widget">
+              <label htmlFor="acd-position" className="company-dialog__label">
+                Position
+              </label>
+              <input
+                id="acd-position"
+                {...register("position")}
+                className={errors.position ? "error" : ""}
+                placeholder="z. B. HR Manager"
+              />
+              {errors.position && (
+                <span className="error-message">{errors.position.message}</span>
+              )}
+            </div>
+            <div className="widget">
               <label htmlFor="acd-phone" className="company-dialog__label">
                 Telefon
               </label>
@@ -292,21 +320,22 @@ function AddContactDialog({
                 <span className="error-message">{errors.phone.message}</span>
               )}
             </div>
-            <div className="widget">
-              <label htmlFor="acd-linkedin" className="company-dialog__label">
-                LinkedIn
-              </label>
-              <input
-                id="acd-linkedin"
-                {...register("linkedIn")}
-                className={errors.linkedIn ? "error" : ""}
-                type="url"
-                placeholder="https://linkedin.com/in/…"
-              />
-              {errors.linkedIn && (
-                <span className="error-message">{errors.linkedIn.message}</span>
-              )}
-            </div>
+          </div>
+
+          <div className="widget">
+            <label htmlFor="acd-linkedin" className="company-dialog__label">
+              LinkedIn
+            </label>
+            <input
+              id="acd-linkedin"
+              {...register("linkedIn")}
+              className={errors.linkedIn ? "error" : ""}
+              type="url"
+              placeholder="https://linkedin.com/in/…"
+            />
+            {errors.linkedIn && (
+              <span className="error-message">{errors.linkedIn.message}</span>
+            )}
           </div>
 
           <div className="company-dialog__footer">

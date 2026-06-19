@@ -14,6 +14,7 @@ const contactSchema = new Schema<ContactDocument>(
     email: { type: String, required: true },
     phone: String,
     company: { type: Schema.Types.ObjectId, ref: "Company" },
+    position: String,
     linkedIn: String,
   },
   { timestamps: true },

@@ -146,6 +146,9 @@ function ContactCard({
       <div className="contact-card__body">
         <div className="contact-card__top">
           <p className="contact-card__name">{contact.name}</p>
+          {contact.position && (
+            <span className="contact-card__position">{contact.position}</span>
+          )}
           {company && (
             <span className="contact-card__company">{company.name}</span>
           )}
@@ -311,6 +314,20 @@ function ContactFormDialog({
 
           <div className="company-dialog__row">
             <div className="widget">
+              <label htmlFor="ctf-position" className="company-dialog__label">
+                Position
+              </label>
+              <input
+                id="ctf-position"
+                {...register("position")}
+                className={errors.position ? "error" : ""}
+                placeholder="z. B. HR Manager"
+              />
+              {errors.position && (
+                <span className="error-message">{errors.position.message}</span>
+              )}
+            </div>
+            <div className="widget">
               <label htmlFor="ctf-phone" className="company-dialog__label">
                 Telefon
               </label>
@@ -326,21 +343,22 @@ function ContactFormDialog({
                 <span className="error-message">{errors.phone.message}</span>
               )}
             </div>
-            <div className="widget">
-              <label htmlFor="ctf-linkedin" className="company-dialog__label">
-                LinkedIn
-              </label>
-              <input
-                id="ctf-linkedin"
-                {...register("linkedIn")}
-                className={errors.linkedIn ? "error" : ""}
-                type="url"
-                placeholder="https://linkedin.com/in/…"
-              />
-              {errors.linkedIn && (
-                <span className="error-message">{errors.linkedIn.message}</span>
-              )}
-            </div>
+          </div>
+
+          <div className="widget">
+            <label htmlFor="ctf-linkedin" className="company-dialog__label">
+              LinkedIn
+            </label>
+            <input
+              id="ctf-linkedin"
+              {...register("linkedIn")}
+              className={errors.linkedIn ? "error" : ""}
+              type="url"
+              placeholder="https://linkedin.com/in/…"
+            />
+            {errors.linkedIn && (
+              <span className="error-message">{errors.linkedIn.message}</span>
+            )}
           </div>
 
           <div className="widget">

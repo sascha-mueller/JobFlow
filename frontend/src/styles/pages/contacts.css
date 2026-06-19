@@ -73,6 +73,12 @@
     text-overflow: ellipsis;
   }
 
+  .contact-card__position {
+    font-size: 12px;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
   .contact-card__company {
     font-size: 12px;
     font-weight: 500;
