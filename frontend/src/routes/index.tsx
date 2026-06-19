@@ -8,6 +8,7 @@ import RegistrationPage from "@/pages/RegistrationForm";
 import Dashboard from "@/pages/Dashboard";
 import CompaniesPage from "@/pages/Companies";
 import CompanyDetail from "@/pages/CompanyDetail";
+import ContactsPage from "@/pages/Contacts";
 
 export default function AppRoutes() {
   return (
@@ -17,6 +18,7 @@ export default function AppRoutes() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/firmen" element={<CompaniesPage />} />
           <Route path="/firmen/:id" element={<CompanyDetail />} />
+          <Route path="/kontakte" element={<ContactsPage />} />
         </Route>
       </Route>
 
