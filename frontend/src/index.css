@@ -11,6 +11,7 @@
 /** PAGES */
 @import "./styles/pages/companies.css";
 @import "./styles/pages/company-detail.css";
+@import "./styles/pages/contacts.css";
 
 /** COMPONENTS */
 @import "./styles/components/logo.css";

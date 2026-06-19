@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate, useParams } from "react-router";
 import { ExternalLink, Mail, MapPin, Phone, Plus } from "lucide-react";
 import { toast } from "sonner";
@@ -9,7 +11,8 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import type { Company, Contact } from "@jobflow/shared";
+import type { Company, Contact, CreateContactInput } from "@jobflow/shared";
+import { createContactSchema } from "@jobflow/shared";
 import { companiesApi } from "@/lib/companies.api";
 import { contactsApi } from "@/lib/contacts.api";
 import { useUiStore } from "@/stores/ui.store";
@@ -106,12 +109,12 @@ export default function CompanyDetail() {
         <ApplicationsPanel />
       </div>
 
-      <LinkContactDialog
+      <AddContactDialog
         open={showLinkDialog}
         companyId={company._id}
-        linkedIds={contacts.map((c) => c._id)}
+        companyName={company.name}
         onClose={() => setShowLinkDialog(false)}
-        onLinked={(contact) => setContacts((prev) => [...prev, contact])}
+        onCreated={(contact) => setContacts((prev) => [...prev, contact])}
       />
     </div>
   );
@@ -177,53 +180,50 @@ function ContactsPanel({
   );
 }
 
-/* ── Kontakt verknüpfen Dialog ──────────────────────────────── */
+/* ── Kontakt anlegen Dialog ─────────────────────────────────── */
 
-interface LinkContactDialogProps {
+interface AddContactDialogProps {
   open: boolean;
   companyId: string;
-  linkedIds: string[];
+  companyName: string;
   onClose: () => void;
-  onLinked: (contact: Contact) => void;
+  onCreated: (contact: Contact) => void;
 }
 
-function LinkContactDialog({
+function AddContactDialog({
   open,
   companyId,
-  linkedIds,
+  companyName,
   onClose,
-  onLinked,
-}: LinkContactDialogProps) {
-  const [available, setAvailable] = useState<Contact[]>([]);
-  const [loadState, setLoadState] = useState<"loading" | "done" | "error">(
-    "loading",
-  );
-  const [linkingId, setLinkingId] = useState<string | null>(null);
+  onCreated,
+}: AddContactDialogProps) {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<CreateContactInput>({
+    resolver: zodResolver(createContactSchema),
+    defaultValues: { company: companyId },
+  });
 
   useEffect(() => {
-    if (!open) return;
-    setLoadState("loading");
-    contactsApi
-      .getAll()
-      .then((all) => {
-        setAvailable(all.filter((c) => !c.company && !linkedIds.includes(c._id)));
-        setLoadState("done");
-      })
-      .catch(() => setLoadState("error"));
-  }, [open]);
+    if (open) reset({ company: companyId });
+  }, [open, companyId]);
 
-  const handleLink = async (contact: Contact) => {
-    setLinkingId(contact._id);
+  const submit = async (data: CreateContactInput) => {
     try {
-      const updated = await contactsApi.update(contact._id, {
+      const contact = await contactsApi.create({
+        ...data,
+        phone: data.phone || undefined,
+        linkedIn: data.linkedIn || undefined,
         company: companyId,
       });
-      onLinked(updated);
-      setAvailable((prev) => prev.filter((c) => c._id !== contact._id));
+      onCreated(contact);
+      onClose();
+      toast.success(`${contact.name} wurde angelegt.`);
     } catch {
-      toast.error("Kontakt konnte nicht zugeordnet werden.");
-    } finally {
-      setLinkingId(null);
+      toast.error("Speichern fehlgeschlagen. Bitte erneut versuchen.");
     }
   };
 
@@ -231,57 +231,103 @@ function LinkContactDialog({
     <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="company-dialog">
         <DialogHeader className="company-dialog__header">
-          <p className="company-dialog__eyebrow">Ansprechpartner</p>
+          <p className="company-dialog__eyebrow">{companyName}</p>
           <DialogTitle className="company-dialog__title">
-            Kontakt zuordnen
+            Ansprechpartner anlegen
           </DialogTitle>
           <DialogDescription className="company-dialog__desc">
-            Wähle einen bestehenden Kontakt aus, der dieser Firma zugeordnet
-            werden soll.
+            Neuer Kontakt wird direkt dieser Firma zugeordnet.
           </DialogDescription>
         </DialogHeader>
 
-        {loadState === "loading" && (
-          <p className="cd-feedback">Lade Kontakte …</p>
-        )}
-        {loadState === "error" && (
-          <p className="cd-feedback cd-feedback--error">
-            Kontakte konnten nicht geladen werden.
-          </p>
-        )}
-        {loadState === "done" && available.length === 0 && (
-          <p className="cd-empty lc-empty">
-            Keine freien Kontakte verfügbar. Lege zuerst einen Kontakt an.
-          </p>
-        )}
-        {loadState === "done" && available.length > 0 && (
-          <ul className="lc-list">
-            {available.map((contact) => (
-              <li key={contact._id} className="lc-item">
-                <span className="cd-contact-avatar" aria-hidden="true">
-                  {nameInitials(contact.name ?? "")}
-                </span>
-                <div className="lc-info">
-                  <p className="cd-contact-name">{contact.name}</p>
-                  <p className="lc-email">{contact.email}</p>
-                </div>
-                <button
-                  className="btn btn-sm btn-ghost"
-                  onClick={() => handleLink(contact)}
-                  disabled={linkingId === contact._id}
-                >
-                  {linkingId === contact._id ? "…" : "Zuordnen"}
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
+        <form className="formbody" onSubmit={handleSubmit(submit)} noValidate>
+          <div className="widget">
+            <label htmlFor="acd-name" className="company-dialog__label">
+              Name <span aria-hidden="true">*</span>
+            </label>
+            <input
+              id="acd-name"
+              {...register("name")}
+              className={errors.name ? "error" : ""}
+              placeholder="z. B. Maria Muster"
+              autoComplete="name"
+              autoFocus
+            />
+            {errors.name && (
+              <span className="error-message">{errors.name.message}</span>
+            )}
+          </div>
 
-        <div className="company-dialog__footer">
-          <button className="btn btn-ghost" onClick={onClose}>
-            Schließen
-          </button>
-        </div>
+          <div className="widget">
+            <label htmlFor="acd-email" className="company-dialog__label">
+              E-Mail <span aria-hidden="true">*</span>
+            </label>
+            <input
+              id="acd-email"
+              {...register("email")}
+              className={errors.email ? "error" : ""}
+              type="email"
+              placeholder="maria@beispiel.de"
+              autoComplete="email"
+            />
+            {errors.email && (
+              <span className="error-message">{errors.email.message}</span>
+            )}
+          </div>
+
+          <div className="company-dialog__row">
+            <div className="widget">
+              <label htmlFor="acd-phone" className="company-dialog__label">
+                Telefon
+              </label>
+              <input
+                id="acd-phone"
+                {...register("phone")}
+                className={errors.phone ? "error" : ""}
+                type="tel"
+                placeholder="+49 30 12345678"
+                autoComplete="tel"
+              />
+              {errors.phone && (
+                <span className="error-message">{errors.phone.message}</span>
+              )}
+            </div>
+            <div className="widget">
+              <label htmlFor="acd-linkedin" className="company-dialog__label">
+                LinkedIn
+              </label>
+              <input
+                id="acd-linkedin"
+                {...register("linkedIn")}
+                className={errors.linkedIn ? "error" : ""}
+                type="url"
+                placeholder="https://linkedin.com/in/…"
+              />
+              {errors.linkedIn && (
+                <span className="error-message">{errors.linkedIn.message}</span>
+              )}
+            </div>
+          </div>
+
+          <div className="company-dialog__footer">
+            <button
+              type="button"
+              className="btn btn-ghost"
+              onClick={onClose}
+              disabled={isSubmitting}
+            >
+              Abbrechen
+            </button>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={isSubmitting}
+            >
+              <Plus size={16} aria-hidden="true" />
+              {isSubmitting ? "Speichern …" : "Kontakt anlegen"}
+            </button>
+          </div>
+        </form>
       </DialogContent>
     </Dialog>
   );

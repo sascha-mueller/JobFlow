@@ -1,10 +1,11 @@
-import { Building2, ListChecks, LogOut, UserRound } from "lucide-react";
+import { Building2, Contact, ListChecks, LogOut, UserRound } from "lucide-react";
 import { NavLink } from "react-router";
 import { useAuthStore } from "@/stores/auth.store";
 
 const NAV_ITEMS = [
   { to: "/dashboard", label: "Dashboard", Icon: ListChecks },
   { to: "/firmen", label: "Firmen", Icon: Building2 },
+  { to: "/kontakte", label: "Kontakte", Icon: Contact },
   { to: "/profil", label: "Meine Daten", Icon: UserRound },
 ];
 
