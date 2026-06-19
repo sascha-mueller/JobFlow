@@ -297,7 +297,7 @@ function ContactFormDialog({
 
           <div className="widget">
             <label htmlFor="ctf-email" className="company-dialog__label">
-              E-Mail <span aria-hidden="true">*</span>
+              E-Mail
             </label>
             <input
               id="ctf-email"

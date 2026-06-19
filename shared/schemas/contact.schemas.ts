@@ -3,15 +3,15 @@ import { objectIdSchema } from "./common/objectId.schema.ts";
 
 export const createContactSchema = z.object({
   name: z.string().min(2),
-  email: z.email(),
+  email: z.string().optional().transform((v) => v || undefined).pipe(z.email().optional()),
   phone: z.string().optional(),
   company: z.string().optional(), // MongoDB ObjectId als String vom Client
   position: z.string().optional(),
   linkedIn: z
     .string()
-    .transform((v) => (/^https?:\/\//i.test(v) ? v : `https://${v}`))
-    .pipe(z.url())
-    .optional(),
+    .optional()
+    .transform((v) => (!v ? undefined : /^https?:\/\//i.test(v) ? v : `https://${v}`))
+    .pipe(z.url().optional()),
 });
 
 export const updateContactSchema = createContactSchema.partial();

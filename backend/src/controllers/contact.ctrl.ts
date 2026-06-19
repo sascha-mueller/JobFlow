@@ -23,18 +23,16 @@ export const createContact: RequestHandler = async (req, res, next) => {
     const data = createContactSchema.parse(req.body);
     const userId = req.user!.id;
 
-    const found = await Contact.findOne({
-      email: data.email,
-      user: userId,
-    });
-
-    if (found) {
-      throw new AppError(
-        400,
-        `Contact: ${data.name} already exists`,
-        "CONTACT_EXISTS",
-        "WARN",
-      );
+    if (data.email) {
+      const found = await Contact.findOne({ email: data.email, user: userId });
+      if (found) {
+        throw new AppError(
+          400,
+          `Contact: ${data.name} already exists`,
+          "CONTACT_EXISTS",
+          "WARN",
+        );
+      }
     }
 
     if (data.company) {
