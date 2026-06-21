@@ -10,9 +10,10 @@ import { AppError } from "../utils/index.ts";
 
 export const getApplications: RequestHandler = async (req, res, next) => {
   try {
-    const applications = await Application.find({ user: req.user!.id }).sort({
-      createdAt: -1,
-    });
+    const applications = await Application.find({ user: req.user!.id })
+      .populate("company", "name")
+      .sort({ createdAt: -1 })
+      .lean();
 
     res.json(applications);
   } catch (error: unknown) {
@@ -41,7 +42,10 @@ export const getApplicationById: RequestHandler = async (req, res, next) => {
     const application = await Application.findOne({
       _id: id,
       user: req.user!.id,
-    });
+    })
+      .populate("company", "name")
+      .populate("contact", "name email phone position linkedIn")
+      .lean();
 
     if (!application) {
       throw new AppError(
@@ -67,7 +71,9 @@ export const updateApplication: RequestHandler = async (req, res, next) => {
       { _id: id, user: req.user!.id },
       data,
       { new: true, runValidators: true },
-    );
+    )
+      .populate("company", "name")
+      .populate("contact", "name email phone position linkedIn");
 
     if (!application) {
       throw new AppError(
