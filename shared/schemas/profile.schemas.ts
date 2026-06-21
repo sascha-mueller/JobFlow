@@ -15,3 +15,8 @@ export const updateProfileSchema = createProfileSchema.partial();
 
 export type CreateProfileInput = z.infer<typeof createProfileSchema>;
 export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;
+
+export type Profile = CreateProfileInput & {
+  _id: string;
+  user: string;
+};

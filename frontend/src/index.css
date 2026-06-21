@@ -9,6 +9,8 @@
 @import "./styles/layouts/auth.css";
 
 /** PAGES */
+@import "./styles/pages/dashboard.css";
+@import "./styles/pages/print.css";
 @import "./styles/pages/applications.css";
 @import "./styles/pages/application-detail.css";
 @import "./styles/pages/companies.css";
