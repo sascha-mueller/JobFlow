@@ -518,10 +518,10 @@ function ApplicationsPanel({ companyId }: { companyId: string }) {
           {applications.map((app) => (
             <li key={app._id}>
               <Link to={`/bewerbungen/${app._id}`} className="cd-app-item">
+                <span className="cd-app-name">{app.name}</span>
                 <span className="cd-app-badge" data-status={app.status}>
                   {STATUS_LABELS[app.status] ?? app.status}
                 </span>
-                <span className="cd-app-name">{app.name}</span>
               </Link>
             </li>
           ))}
