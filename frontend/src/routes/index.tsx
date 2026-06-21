@@ -11,11 +11,13 @@ import ApplicationDetail from "@/pages/ApplicationDetail";
 import CompaniesPage from "@/pages/Companies";
 import CompanyDetail from "@/pages/CompanyDetail";
 import ContactsPage from "@/pages/Contacts";
+import PrintApplications from "@/pages/PrintApplications";
 
 export default function AppRoutes() {
   return (
     <Routes>
       <Route element={<PrivateRoute />}>
+        <Route path="/bewerbungen/drucken" element={<PrintApplications />} />
         <Route element={<AppLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/bewerbungen" element={<ApplicationsPage />} />
