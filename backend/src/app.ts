@@ -13,6 +13,7 @@ import {
   profileRouter,
   docRouter,
   appRouter,
+  taskRouter,
 } from "./routes/index.ts";
 
 const app = express();
@@ -27,6 +28,7 @@ app.use("/api/users", userRouter);
 app.use("/api/profiles", profileRouter);
 app.use("/api/docs", docRouter);
 app.use("/api/apps", appRouter);
+app.use("/api/tasks", taskRouter);
 
 app.use((req, res) => {
   console.warn("[404 Route]", {

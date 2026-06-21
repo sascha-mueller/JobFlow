@@ -5,3 +5,4 @@ export * from "./user.ctrl.ts";
 export * from "./profile.ctrl.ts";
 export * from "./doc.ctrl.ts";
 export * from "./app.ctrl.ts";
+export * from "./task.ctrl.ts";

@@ -1,9 +1,11 @@
 @baseUrl = http://localhost:3001/api
 @userId = 6a3450cbb6ac0ba62ec6e3bd
 @appId = 6a3458f09d70213273ae0ab8
-@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3ODE4MTUxOTUsImV4cCI6MTc4MTkwMTU5NSwic3ViIjoiNmEzNDUwY2JiNmFjMGJhNjJlYzZlM2JkIn0.XkKEzT9EJRog2EOB9AT6iZSgdVRJke3Jf0kdG98_8sM
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3ODIwNjY2MzIsImV4cCI6MTc4MjE1MzAzMiwic3ViIjoiNmEzNDUwY2JiNmFjMGJhNjJlYzZlM2JkIn0.uT7Ncrtn9k3Ji3uiLnojCRmlBumG0KOl1u32wDaL1Ws
 @companyId = 6a345158b6ac0ba62ec6e3c1
 @contactId = 6a3456d29d70213273ae0aa5
+@applicationId = 6a3458f09d70213273ae0ab8
+@taskId = 6a382e1d724b4c576c8a49f9
 
 
 
@@ -136,4 +138,75 @@ Content-Type: application/json
 
 ### Delete Application
 DELETE {{baseUrl}}/apps/{{appId}}
+Authorization: Bearer {{accessToken}}
+
+
+
+### Create | Duplicate Task
+POST {{baseUrl}}/tasks
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "title": "Prepare interview",
+  "description": "Review company information",
+  "status": "TODO",
+  "application": "{{applicationId}}",
+  "priority": 3
+}
+
+### Get Tasks
+GET {{baseUrl}}/tasks
+Authorization: Bearer {{accessToken}}
+
+### Get Task By Id
+GET {{baseUrl}}/tasks/{{taskId}}
+Authorization: Bearer {{accessToken}}
+
+### Update Status
+PATCH {{baseUrl}}/tasks/{{taskId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "status": "IN_PROGRESS"
+}
+
+### Update Priority
+PATCH {{baseUrl}}/tasks/{{taskId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "priority": 5
+}
+
+### Update Multiple Fields
+PATCH {{baseUrl}}/tasks/{{taskId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "title": "Prepare technical interview",
+  "status": "DONE",
+  "priority": 1
+}
+
+### Invalid Application
+POST {{baseUrl}}/tasks
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "title": "Invalid Task",
+  "status": "TODO",
+  "application": "685555555555555555555555"
+}
+
+### Delete Task
+DELETE {{baseUrl}}/tasks/{{taskId}}
+Authorization: Bearer {{accessToken}}
+
+### Get Deleted Task
+GET {{baseUrl}}/tasks/{{taskId}}
 Authorization: Bearer {{accessToken}}
