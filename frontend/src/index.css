@@ -11,10 +11,12 @@
 /** PAGES */
 @import "./styles/pages/companies.css";
 @import "./styles/pages/company-detail.css";
+@import "./styles/pages/contacts.css";
 
 /** COMPONENTS */
 @import "./styles/components/logo.css";
 @import "./styles/components/nav-sidebar.css";
+@import "./styles/components/typo.css";
 @import "./styles/components/form.css";
 @import "./styles/components/buttons.css";
 @import "./styles/components/dialog.css";

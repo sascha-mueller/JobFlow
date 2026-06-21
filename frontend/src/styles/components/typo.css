@@ -1,0 +1,12 @@
+h1,
+h2 {
+  font-family: var(--f-serif);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.08;
+  color: var(--text);
+}
+
+h1 {
+  font-size: 30px;
+}
