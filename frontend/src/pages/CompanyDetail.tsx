@@ -28,6 +28,8 @@ export default function CompanyDetail() {
     "loading",
   );
   const [showLinkDialog, setShowLinkDialog] = useState(false);
+  const [showSelectDialog, setShowSelectDialog] = useState(false);
+  const [allContacts, setAllContacts] = useState<Contact[]>([]);
 
   useEffect(() => {
     if (!id) {
@@ -35,9 +37,16 @@ export default function CompanyDetail() {
       return;
     }
     Promise.all([companiesApi.getById(id), contactsApi.getAll()])
-      .then(([comp, allContacts]) => {
+      .then(([comp, fetched]) => {
         setCompany(comp);
-        setContacts(allContacts.filter((c) => c.company === id));
+        setAllContacts(fetched);
+        const linked = fetched.filter((c) => c.company === id);
+        const primaryId = comp.contact?._id;
+        const hasPrimary = primaryId && linked.some((c) => c._id === primaryId);
+        const primary = !hasPrimary && primaryId
+          ? fetched.find((c) => c._id === primaryId)
+          : undefined;
+        setContacts(primary ? [primary, ...linked] : linked);
         setLoadState("done");
       })
       .catch(() => setLoadState("error"));
@@ -105,6 +114,7 @@ export default function CompanyDetail() {
         <ContactsPanel
           contacts={contacts}
           onAdd={() => setShowLinkDialog(true)}
+          onLink={() => setShowSelectDialog(true)}
         />
         <ApplicationsPanel />
       </div>
@@ -116,6 +126,21 @@ export default function CompanyDetail() {
         onClose={() => setShowLinkDialog(false)}
         onCreated={(contact) => setContacts((prev) => [...prev, contact])}
       />
+
+      <SelectContactDialog
+        open={showSelectDialog}
+        contacts={allContacts.filter(
+          (c) => !contacts.some((linked) => linked._id === c._id),
+        )}
+        onClose={() => setShowSelectDialog(false)}
+        onSelect={async (contactId) => {
+          const updated = await companiesApi.update(company._id, { contact: contactId });
+          setCompany(updated);
+          const selected = allContacts.find((c) => c._id === contactId);
+          if (selected) setContacts((prev) => [selected, ...prev]);
+          setShowSelectDialog(false);
+        }}
+      />
     </div>
   );
 }
@@ -125,21 +150,31 @@ export default function CompanyDetail() {
 function ContactsPanel({
   contacts,
   onAdd,
+  onLink,
 }: {
   contacts: Contact[];
   onAdd: () => void;
+  onLink: () => void;
 }) {
   return (
     <div className="cd-panel">
       <div className="cd-panel__header">
         <span className="cd-panel__title">Ansprechpartner</span>
-        <button
-          className="btn btn-sm btn-ghost cd-panel__add-btn"
-          onClick={onAdd}
-        >
-          <Plus size={14} />
-          Hinzufügen
-        </button>
+        <div style={{ display: "flex", gap: "0.375rem" }}>
+          <button
+            className="btn btn-sm btn-ghost cd-panel__add-btn"
+            onClick={onLink}
+          >
+            Verknüpfen
+          </button>
+          <button
+            className="btn btn-sm btn-ghost cd-panel__add-btn"
+            onClick={onAdd}
+          >
+            <Plus size={14} />
+            Neu anlegen
+          </button>
+        </div>
       </div>
 
       {contacts.length === 0 ? (
@@ -354,6 +389,93 @@ function AddContactDialog({
             >
               <Plus size={16} aria-hidden="true" />
               {isSubmitting ? "Speichern …" : "Kontakt anlegen"}
+            </button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+/* ── Bestehenden Kontakt verknüpfen ─────────────────────────── */
+
+function SelectContactDialog({
+  open,
+  contacts,
+  onClose,
+  onSelect,
+}: {
+  open: boolean;
+  contacts: Contact[];
+  onClose: () => void;
+  onSelect: (contactId: string) => Promise<void>;
+}) {
+  const [selected, setSelected] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (open) setSelected("");
+  }, [open]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selected) return;
+    setSaving(true);
+    try {
+      await onSelect(selected);
+    } catch {
+      toast.error("Verknüpfen fehlgeschlagen.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="company-dialog">
+        <DialogHeader className="company-dialog__header">
+          <p className="company-dialog__eyebrow">Ansprechpartner</p>
+          <DialogTitle className="company-dialog__title">
+            Bestehenden Kontakt verknüpfen
+          </DialogTitle>
+          <DialogDescription className="company-dialog__desc">
+            Wähle einen vorhandenen Kontakt aus deiner Liste.
+          </DialogDescription>
+        </DialogHeader>
+        <form className="formbody" onSubmit={handleSubmit} noValidate>
+          <div className="widget">
+            <label htmlFor="sc-contact" className="company-dialog__label">
+              Kontakt <span aria-hidden="true">*</span>
+            </label>
+            <select
+              id="sc-contact"
+              value={selected}
+              onChange={(e) => setSelected(e.target.value)}
+              required
+            >
+              <option value="">– Kontakt wählen –</option>
+              {contacts.map((c) => (
+                <option key={c._id} value={c._id}>
+                  {c.name}{c.position ? ` · ${c.position}` : ""}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="company-dialog__footer">
+            <button
+              type="button"
+              className="btn btn-ghost"
+              onClick={onClose}
+              disabled={saving}
+            >
+              Abbrechen
+            </button>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={!selected || saving}
+            >
+              {saving ? "Speichern …" : "Verknüpfen"}
             </button>
           </div>
         </form>

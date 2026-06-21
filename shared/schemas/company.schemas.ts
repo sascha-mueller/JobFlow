@@ -7,9 +7,10 @@ export const createCompanySchema = z.object({
   city: z.string().min(3),
   zip: z.string().min(3),
   website: z.string()
-    .transform((v) => (/^https?:\/\//i.test(v) ? v : `https://${v}`))
-    .pipe(z.url())
+    .transform((v) => (v.trim() === "" ? undefined : /^https?:\/\//i.test(v) ? v : `https://${v}`))
+    .pipe(z.url().optional())
     .optional(),
+  contact: z.string().optional(), // MongoDB ObjectId als String vom Client
   notes: z.string().optional(),
 });
 
@@ -22,9 +23,18 @@ export const companyIdParamsSchema = z.object({
   id: objectIdSchema,
 });
 
-export type Company = CreateCompanyInput & {
+export type CompanyContact = {
+  _id: string;
+  name: string;
+  position?: string;
+  email?: string;
+  phone?: string;
+};
+
+export type Company = Omit<CreateCompanyInput, "contact"> & {
   _id: string;
   user: string;
+  contact?: CompanyContact;
   createdAt: string;
   updatedAt: string;
 };

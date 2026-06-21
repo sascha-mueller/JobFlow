@@ -10,7 +10,9 @@ import { AppError } from "../utils/index.ts";
 
 export const getCompanies: RequestHandler = async (req, res, next) => {
   try {
-    const companies = await Company.find({ user: req.user!.id });
+    const companies = await Company.find({ user: req.user!.id })
+      .populate("contact", "name position email phone")
+      .lean();
 
     res.json(companies);
   } catch (error: unknown) {
@@ -51,7 +53,9 @@ export const createCompany: RequestHandler = async (req, res, next) => {
 export const getCompanyById: RequestHandler = async (req, res, next) => {
   try {
     const { id } = companyIdParamsSchema.parse(req.params);
-    const company = await Company.findOne({ _id: id, user: req.user!.id });
+    const company = await Company.findOne({ _id: id, user: req.user!.id })
+      .populate("contact", "name position email phone")
+      .lean();
 
     if (!company) {
       throw new AppError(404, `Company: ${id} not found`, "NO_COMPANY", "WARN");
@@ -71,11 +75,10 @@ export const updateCompany: RequestHandler = async (req, res, next) => {
     const company = await Company.findOneAndUpdate(
       { _id: id, user: req.user!.id },
       data,
-      {
-        new: true,
-        runValidators: true,
-      },
-    );
+      { new: true, runValidators: true },
+    )
+      .populate("contact", "name position email phone")
+      .lean();
 
     if (!company) {
       throw new AppError(404, `Company: ${id} not found`, "NO_COMPANY", "WARN");

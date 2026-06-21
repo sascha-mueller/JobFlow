@@ -13,6 +13,7 @@ const companySchema = new Schema<CompanyDocument>(
     city: { type: String, required: true },
     zip: { type: String, required: true },
     website: String,
+    contact: { type: Schema.Types.ObjectId, ref: "Contact" },
     notes: String,
   },
   { timestamps: true },
