@@ -32,9 +32,22 @@ export const applicationIdParamsSchema = z.object({
   id: objectIdSchema,
 });
 
-export type Application = CreateApplicationInput & {
+export type PopulatedCompany = { _id: string; name: string };
+
+export type PopulatedContact = {
+  _id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  position?: string;
+  linkedIn?: string;
+};
+
+export type Application = Omit<CreateApplicationInput, "company" | "contact"> & {
   _id: string;
   user: string;
+  company?: PopulatedCompany;
+  contact?: PopulatedContact;
   createdAt: string;
   updatedAt: string;
 };
