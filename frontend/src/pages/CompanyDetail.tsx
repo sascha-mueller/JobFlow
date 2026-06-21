@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { ExternalLink, Mail, MapPin, Phone, Plus } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -11,11 +11,13 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import type { Company, Contact, CreateContactInput } from "@jobflow/shared";
+import type { Application, Company, Contact, CreateContactInput } from "@jobflow/shared";
 import { createContactSchema } from "@jobflow/shared";
 import { companiesApi } from "@/lib/companies.api";
 import { contactsApi } from "@/lib/contacts.api";
+import { applicationsApi } from "@/lib/applications.api";
 import { useUiStore } from "@/stores/ui.store";
+import ApplicationFormDialog, { STATUS_LABELS } from "@/components/ApplicationFormDialog";
 
 export default function CompanyDetail() {
   const { id } = useParams<{ id: string }>();
@@ -116,7 +118,7 @@ export default function CompanyDetail() {
           onAdd={() => setShowLinkDialog(true)}
           onLink={() => setShowSelectDialog(true)}
         />
-        <ApplicationsPanel />
+        <ApplicationsPanel companyId={company._id} />
       </div>
 
       <AddContactDialog
@@ -134,10 +136,9 @@ export default function CompanyDetail() {
         )}
         onClose={() => setShowSelectDialog(false)}
         onSelect={async (contactId) => {
-          const updated = await companiesApi.update(company._id, { contact: contactId });
-          setCompany(updated);
+          await contactsApi.update(contactId, { company: company._id });
           const selected = allContacts.find((c) => c._id === contactId);
-          if (selected) setContacts((prev) => [selected, ...prev]);
+          if (selected) setContacts((prev) => [...prev, selected]);
           setShowSelectDialog(false);
         }}
       />
@@ -486,13 +487,58 @@ function SelectContactDialog({
 
 /* ── Bewerbungen-Panel ──────────────────────────────────────── */
 
-function ApplicationsPanel() {
+function ApplicationsPanel({ companyId }: { companyId: string }) {
+  const [applications, setApplications] = useState<Application[]>([]);
+  const [showDialog, setShowDialog] = useState(false);
+
+  useEffect(() => {
+    applicationsApi
+      .getAll()
+      .then((all) => setApplications(all.filter((a) => a.company?._id === companyId)))
+      .catch(() => {});
+  }, [companyId]);
+
   return (
     <div className="cd-panel">
       <div className="cd-panel__header">
         <span className="cd-panel__title">Bewerbungen</span>
+        <button
+          className="btn btn-sm btn-ghost cd-panel__add-btn"
+          onClick={() => setShowDialog(true)}
+        >
+          <Plus size={14} />
+          Neu anlegen
+        </button>
       </div>
-      <p className="cd-empty">Noch keine Bewerbungen verknüpft.</p>
+
+      {applications.length === 0 ? (
+        <p className="cd-empty">Noch keine Bewerbungen für diese Firma.</p>
+      ) : (
+        <ul className="cd-app-list">
+          {applications.map((app) => (
+            <li key={app._id}>
+              <Link to={`/bewerbungen/${app._id}`} className="cd-app-item">
+                <span className="cd-app-badge" data-status={app.status}>
+                  {STATUS_LABELS[app.status] ?? app.status}
+                </span>
+                <span className="cd-app-name">{app.name}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <ApplicationFormDialog
+        open={showDialog}
+        initialCompanyId={companyId}
+        onClose={() => setShowDialog(false)}
+        onSubmit={async (data) => {
+          const created = await applicationsApi.create({ ...data, company: companyId });
+          setApplications((prev) => [...prev, created]);
+          setShowDialog(false);
+          toast.success(`Bewerbung „${created.name}" angelegt.`);
+        }}
+      />
     </div>
   );
 }

@@ -33,12 +33,13 @@ export const WORKMODE_LABELS: Record<string, string> = {
 interface Props {
   open: boolean;
   defaultValues?: Application;
+  initialCompanyId?: string;
   onClose: () => void;
   onSubmit: (data: CreateApplicationInput) => Promise<void>;
 }
 
-function toFormDefaults(app?: Application): Partial<CreateApplicationInput> {
-  if (!app) return { status: "WATCHLIST", isFavorite: false };
+function toFormDefaults(app?: Application, initialCompanyId?: string): Partial<CreateApplicationInput> {
+  if (!app) return { status: "WATCHLIST", isFavorite: false, company: initialCompanyId };
   return {
     name: app.name,
     description: app.description ?? "",
@@ -61,6 +62,7 @@ function toFormDefaults(app?: Application): Partial<CreateApplicationInput> {
 export default function ApplicationFormDialog({
   open,
   defaultValues,
+  initialCompanyId,
   onClose,
   onSubmit,
 }: Props) {
@@ -74,12 +76,12 @@ export default function ApplicationFormDialog({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } = useForm<CreateApplicationInput>({
     resolver: zodResolver(createApplicationSchema) as any,
-    defaultValues: toFormDefaults(defaultValues),
+    defaultValues: toFormDefaults(defaultValues, initialCompanyId),
   });
 
   useEffect(() => {
-    if (open) reset(toFormDefaults(defaultValues));
-  }, [open, defaultValues]);
+    if (open) reset(toFormDefaults(defaultValues, initialCompanyId));
+  }, [open, defaultValues, initialCompanyId]);
 
   useEffect(() => {
     companiesApi.getAll().then(setCompanies).catch(() => {});

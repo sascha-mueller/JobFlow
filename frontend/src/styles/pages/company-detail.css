@@ -237,6 +237,84 @@
     text-overflow: ellipsis;
   }
 
+  /* ── Bewerbungs-Liste ───────────────────────────────────── */
+
+  .cd-app-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .cd-app-item {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.625rem 0.75rem;
+    background: var(--surface-muted);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    transition: background 0.12s;
+
+    &:hover {
+      background: var(--border);
+    }
+  }
+
+  .cd-app-badge {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 7px;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    font-family: var(--f-mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+
+    &[data-status="WATCHLIST"],
+    &[data-status="DRAFT"] {
+      color: var(--status-draft);
+      background: var(--status-draft-soft);
+      border-color: color-mix(in oklab, var(--status-draft), transparent 80%);
+    }
+    &[data-status="SENT"] {
+      color: var(--status-submitted);
+      background: var(--status-submitted-soft);
+      border-color: color-mix(in oklab, var(--status-submitted), transparent 80%);
+    }
+    &[data-status="INTERVIEW"] {
+      color: var(--status-interview);
+      background: var(--status-interview-soft);
+      border-color: color-mix(in oklab, var(--status-interview), transparent 78%);
+    }
+    &[data-status="OFFER"],
+    &[data-status="ACCEPTED"] {
+      color: var(--status-offer);
+      background: var(--status-offer-soft);
+      border-color: color-mix(in oklab, var(--status-offer), transparent 80%);
+    }
+    &[data-status="REJECTED"] {
+      color: var(--status-rejected);
+      background: var(--status-rejected-soft);
+      border-color: color-mix(in oklab, var(--status-rejected), transparent 80%);
+    }
+  }
+
+  .cd-app-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   /* ── Responsive ─────────────────────────────────────────── */
 
   @container page-container (width < 769px) {
