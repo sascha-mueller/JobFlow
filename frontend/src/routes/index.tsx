@@ -6,6 +6,8 @@ import PageNotFound from "@/pages/PageNotFound";
 import LoginPage from "@/pages/LoginForm";
 import RegistrationPage from "@/pages/RegistrationForm";
 import Dashboard from "@/pages/Dashboard";
+import ApplicationsPage from "@/pages/Applications";
+import ApplicationDetail from "@/pages/ApplicationDetail";
 import CompaniesPage from "@/pages/Companies";
 import CompanyDetail from "@/pages/CompanyDetail";
 import ContactsPage from "@/pages/Contacts";
@@ -16,6 +18,8 @@ export default function AppRoutes() {
       <Route element={<PrivateRoute />}>
         <Route element={<AppLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/bewerbungen" element={<ApplicationsPage />} />
+          <Route path="/bewerbungen/:id" element={<ApplicationDetail />} />
           <Route path="/firmen" element={<CompaniesPage />} />
           <Route path="/firmen/:id" element={<CompanyDetail />} />
           <Route path="/kontakte" element={<ContactsPage />} />

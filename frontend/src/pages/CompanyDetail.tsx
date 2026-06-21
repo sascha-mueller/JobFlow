@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { ExternalLink, Mail, MapPin, Phone, Plus } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -11,11 +11,13 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import type { Company, Contact, CreateContactInput } from "@jobflow/shared";
+import type { Application, Company, Contact, CreateContactInput } from "@jobflow/shared";
 import { createContactSchema } from "@jobflow/shared";
 import { companiesApi } from "@/lib/companies.api";
 import { contactsApi } from "@/lib/contacts.api";
+import { applicationsApi } from "@/lib/applications.api";
 import { useUiStore } from "@/stores/ui.store";
+import ApplicationFormDialog, { STATUS_LABELS } from "@/components/ApplicationFormDialog";
 
 export default function CompanyDetail() {
   const { id } = useParams<{ id: string }>();
@@ -28,6 +30,8 @@ export default function CompanyDetail() {
     "loading",
   );
   const [showLinkDialog, setShowLinkDialog] = useState(false);
+  const [showSelectDialog, setShowSelectDialog] = useState(false);
+  const [allContacts, setAllContacts] = useState<Contact[]>([]);
 
   useEffect(() => {
     if (!id) {
@@ -35,9 +39,16 @@ export default function CompanyDetail() {
       return;
     }
     Promise.all([companiesApi.getById(id), contactsApi.getAll()])
-      .then(([comp, allContacts]) => {
+      .then(([comp, fetched]) => {
         setCompany(comp);
-        setContacts(allContacts.filter((c) => c.company === id));
+        setAllContacts(fetched);
+        const linked = fetched.filter((c) => c.company === id);
+        const primaryId = comp.contact?._id;
+        const hasPrimary = primaryId && linked.some((c) => c._id === primaryId);
+        const primary = !hasPrimary && primaryId
+          ? fetched.find((c) => c._id === primaryId)
+          : undefined;
+        setContacts(primary ? [primary, ...linked] : linked);
         setLoadState("done");
       })
       .catch(() => setLoadState("error"));
@@ -105,8 +116,9 @@ export default function CompanyDetail() {
         <ContactsPanel
           contacts={contacts}
           onAdd={() => setShowLinkDialog(true)}
+          onLink={() => setShowSelectDialog(true)}
         />
-        <ApplicationsPanel />
+        <ApplicationsPanel companyId={company._id} />
       </div>
 
       <AddContactDialog
@@ -115,6 +127,20 @@ export default function CompanyDetail() {
         companyName={company.name}
         onClose={() => setShowLinkDialog(false)}
         onCreated={(contact) => setContacts((prev) => [...prev, contact])}
+      />
+
+      <SelectContactDialog
+        open={showSelectDialog}
+        contacts={allContacts.filter(
+          (c) => !contacts.some((linked) => linked._id === c._id),
+        )}
+        onClose={() => setShowSelectDialog(false)}
+        onSelect={async (contactId) => {
+          await contactsApi.update(contactId, { company: company._id });
+          const selected = allContacts.find((c) => c._id === contactId);
+          if (selected) setContacts((prev) => [...prev, selected]);
+          setShowSelectDialog(false);
+        }}
       />
     </div>
   );
@@ -125,21 +151,31 @@ export default function CompanyDetail() {
 function ContactsPanel({
   contacts,
   onAdd,
+  onLink,
 }: {
   contacts: Contact[];
   onAdd: () => void;
+  onLink: () => void;
 }) {
   return (
     <div className="cd-panel">
       <div className="cd-panel__header">
         <span className="cd-panel__title">Ansprechpartner</span>
-        <button
-          className="btn btn-sm btn-ghost cd-panel__add-btn"
-          onClick={onAdd}
-        >
-          <Plus size={14} />
-          Hinzufügen
-        </button>
+        <div style={{ display: "flex", gap: "0.375rem" }}>
+          <button
+            className="btn btn-sm btn-ghost cd-panel__add-btn"
+            onClick={onLink}
+          >
+            Verknüpfen
+          </button>
+          <button
+            className="btn btn-sm btn-ghost cd-panel__add-btn"
+            onClick={onAdd}
+          >
+            <Plus size={14} />
+            Neu anlegen
+          </button>
+        </div>
       </div>
 
       {contacts.length === 0 ? (
@@ -362,15 +398,147 @@ function AddContactDialog({
   );
 }
 
+/* ── Bestehenden Kontakt verknüpfen ─────────────────────────── */
+
+function SelectContactDialog({
+  open,
+  contacts,
+  onClose,
+  onSelect,
+}: {
+  open: boolean;
+  contacts: Contact[];
+  onClose: () => void;
+  onSelect: (contactId: string) => Promise<void>;
+}) {
+  const [selected, setSelected] = useState("");
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    if (open) setSelected("");
+  }, [open]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selected) return;
+    setSaving(true);
+    try {
+      await onSelect(selected);
+    } catch {
+      toast.error("Verknüpfen fehlgeschlagen.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="company-dialog">
+        <DialogHeader className="company-dialog__header">
+          <p className="company-dialog__eyebrow">Ansprechpartner</p>
+          <DialogTitle className="company-dialog__title">
+            Bestehenden Kontakt verknüpfen
+          </DialogTitle>
+          <DialogDescription className="company-dialog__desc">
+            Wähle einen vorhandenen Kontakt aus deiner Liste.
+          </DialogDescription>
+        </DialogHeader>
+        <form className="formbody" onSubmit={handleSubmit} noValidate>
+          <div className="widget">
+            <label htmlFor="sc-contact" className="company-dialog__label">
+              Kontakt <span aria-hidden="true">*</span>
+            </label>
+            <select
+              id="sc-contact"
+              value={selected}
+              onChange={(e) => setSelected(e.target.value)}
+              required
+            >
+              <option value="">– Kontakt wählen –</option>
+              {contacts.map((c) => (
+                <option key={c._id} value={c._id}>
+                  {c.name}{c.position ? ` · ${c.position}` : ""}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="company-dialog__footer">
+            <button
+              type="button"
+              className="btn btn-ghost"
+              onClick={onClose}
+              disabled={saving}
+            >
+              Abbrechen
+            </button>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={!selected || saving}
+            >
+              {saving ? "Speichern …" : "Verknüpfen"}
+            </button>
+          </div>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 /* ── Bewerbungen-Panel ──────────────────────────────────────── */
 
-function ApplicationsPanel() {
+function ApplicationsPanel({ companyId }: { companyId: string }) {
+  const [applications, setApplications] = useState<Application[]>([]);
+  const [showDialog, setShowDialog] = useState(false);
+
+  useEffect(() => {
+    applicationsApi
+      .getAll()
+      .then((all) => setApplications(all.filter((a) => a.company?._id === companyId)))
+      .catch(() => {});
+  }, [companyId]);
+
   return (
     <div className="cd-panel">
       <div className="cd-panel__header">
         <span className="cd-panel__title">Bewerbungen</span>
+        <button
+          className="btn btn-sm btn-ghost cd-panel__add-btn"
+          onClick={() => setShowDialog(true)}
+        >
+          <Plus size={14} />
+          Neu anlegen
+        </button>
       </div>
-      <p className="cd-empty">Noch keine Bewerbungen verknüpft.</p>
+
+      {applications.length === 0 ? (
+        <p className="cd-empty">Noch keine Bewerbungen für diese Firma.</p>
+      ) : (
+        <ul className="cd-app-list">
+          {applications.map((app) => (
+            <li key={app._id}>
+              <Link to={`/bewerbungen/${app._id}`} className="cd-app-item">
+                <span className="cd-app-name">{app.name}</span>
+                <span className="cd-app-badge" data-status={app.status}>
+                  {STATUS_LABELS[app.status] ?? app.status}
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <ApplicationFormDialog
+        open={showDialog}
+        initialCompanyId={companyId}
+        onClose={() => setShowDialog(false)}
+        onSubmit={async (data) => {
+          const created = await applicationsApi.create({ ...data, company: companyId });
+          setApplications((prev) => [...prev, created]);
+          setShowDialog(false);
+          toast.success(`Bewerbung „${created.name}" angelegt.`);
+        }}
+      />
     </div>
   );
 }

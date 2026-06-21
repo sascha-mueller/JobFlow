@@ -6,6 +6,7 @@ import connectDB from "./db/index.ts";
 
 import { baseErrHandler, extErrHandler } from "./middleware/index.ts";
 import {
+  applicationRouter,
   authRouter,
   companyRouter,
   contactRouter,
@@ -18,6 +19,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
+app.use("/api/applications", applicationRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/companies", companyRouter);
 app.use("/api/contacts", contactRouter);

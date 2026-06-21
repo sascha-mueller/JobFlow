@@ -3,6 +3,7 @@ import {
   ApplicationStatus,
   WorkMode,
 } from "../constants/application.constants.ts";
+import { objectIdSchema } from "./common/objectId.schema.ts";
 
 export const createApplicationSchema = z.object({
   name: z.string().min(3),
@@ -26,3 +27,27 @@ export const updateApplicationSchema = createApplicationSchema.partial();
 
 export type CreateApplicationInput = z.infer<typeof createApplicationSchema>;
 export type UpdateApplicationInput = z.infer<typeof updateApplicationSchema>;
+
+export const applicationIdParamsSchema = z.object({
+  id: objectIdSchema,
+});
+
+export type PopulatedCompany = { _id: string; name: string };
+
+export type PopulatedContact = {
+  _id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  position?: string;
+  linkedIn?: string;
+};
+
+export type Application = Omit<CreateApplicationInput, "company" | "contact"> & {
+  _id: string;
+  user: string;
+  company?: PopulatedCompany;
+  contact?: PopulatedContact;
+  createdAt: string;
+  updatedAt: string;
+};

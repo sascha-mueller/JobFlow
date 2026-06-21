@@ -11,9 +11,10 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import type { Company, CreateCompanyInput } from "@jobflow/shared";
+import type { Company, Contact, CreateCompanyInput } from "@jobflow/shared";
 import { createCompanySchema } from "@jobflow/shared";
 import { companiesApi } from "@/lib/companies.api";
+import { contactsApi } from "@/lib/contacts.api";
 import { useUiStore } from "@/stores/ui.store";
 
 type DialogState = null | { mode: "create" } | { mode: "edit"; company: Company };
@@ -99,7 +100,11 @@ export default function Companies() {
 
       <CompanyFormDialog
         open={dialog !== null}
-        defaultValues={dialog?.mode === "edit" ? dialog.company : undefined}
+        defaultValues={
+          dialog?.mode === "edit"
+            ? { ...dialog.company, contact: dialog.company.contact?._id }
+            : undefined
+        }
         onClose={closeDialog}
         onSubmit={(data) =>
           dialog?.mode === "edit"
@@ -213,6 +218,7 @@ function CompanyFormDialog({
   onClose,
   onSubmit,
 }: CompanyFormDialogProps) {
+  const [contacts, setContacts] = useState<Contact[]>([]);
   const {
     register,
     handleSubmit,
@@ -226,6 +232,10 @@ function CompanyFormDialog({
   useEffect(() => {
     if (open) reset(defaultValues ?? {});
   }, [open, defaultValues]);
+
+  useEffect(() => {
+    contactsApi.getAll().then(setContacts).catch(() => {});
+  }, []);
 
   const submit = async (data: CreateCompanyInput) => {
     try {
@@ -327,6 +337,25 @@ function CompanyFormDialog({
             {errors.website && (
               <span className="error-message">{errors.website.message}</span>
             )}
+          </div>
+
+          <div className="widget">
+            <label htmlFor="cf-contact" className="company-dialog__label">
+              Ansprechpartner
+            </label>
+            <select
+              id="cf-contact"
+              {...register("contact", {
+                setValueAs: (v) => (v === "" ? undefined : v),
+              })}
+            >
+              <option value="">– keiner –</option>
+              {contacts.map((c) => (
+                <option key={c._id} value={c._id}>
+                  {c.name}{c.position ? ` · ${c.position}` : ""}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="company-dialog__footer">
