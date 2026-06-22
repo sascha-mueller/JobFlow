@@ -16,6 +16,7 @@ interface PageMeta {
   metaTitle: string;
   metaDescription: string;
   action?: PageAction;
+  secondaryAction?: PageAction;
   backLink?: PageBackLink;
 }
 
