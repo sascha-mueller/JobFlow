@@ -43,11 +43,21 @@ export type PopulatedContact = {
   linkedIn?: string;
 };
 
-export type Application = Omit<CreateApplicationInput, "company" | "contact"> & {
+export type StatusHistoryEntry = {
+  status: ApplicationStatus;
+  changedAt: string;
+  note?: string;
+};
+
+export type Application = Omit<
+  CreateApplicationInput,
+  "company" | "contact"
+> & {
   _id: string;
   user: string;
   company?: PopulatedCompany;
   contact?: PopulatedContact;
+  statusHistory: StatusHistoryEntry[];
   createdAt: string;
   updatedAt: string;
 };

@@ -14,6 +14,7 @@ type ApplicationDocument = Omit<
   appliedAt?: Date;
   deadline?: Date;
   followUpAt?: Date;
+  statusHistory: { status: string; changedAt: Date; note?: string }[];
 };
 
 const applicationSchema = new Schema<ApplicationDocument>(
@@ -27,6 +28,13 @@ const applicationSchema = new Schema<ApplicationDocument>(
     isFavorite: { type: Boolean, default: false },
     // .options liefert das string-Array des Zod-Enums — keine manuelle Dopplung
     status: { type: String, enum: ApplicationStatus.options, required: true },
+    statusHistory: [
+      {
+        status: { type: String, enum: ApplicationStatus.options, required: true },
+        changedAt: { type: Date, required: true },
+        note: String,
+      },
+    ],
     company: { type: Schema.Types.ObjectId, ref: "Company" },
     contact: { type: Schema.Types.ObjectId, ref: "Contact" },
     workLocation: String,
