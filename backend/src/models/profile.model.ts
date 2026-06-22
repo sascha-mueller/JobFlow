@@ -2,8 +2,6 @@ import { Schema, model, Types } from "mongoose";
 import { Salutation } from "@jobflow/shared";
 import type { CreateProfileInput } from "@jobflow/shared";
 
-// cSpell:disable-next-line
-// photo kommt vom Client als string (ObjectId), in der DB ist es Types.ObjectId
 type ProfileDocument = Omit<CreateProfileInput, "photo"> & {
   user: Types.ObjectId;
   photo?: Types.ObjectId;
@@ -11,8 +9,6 @@ type ProfileDocument = Omit<CreateProfileInput, "photo"> & {
 
 const profileSchema = new Schema<ProfileDocument>(
   {
-    // cSpell:disable-next-line
-    // unique: true erzwingt die 1:1-Beziehung auf DB-Ebene
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",
@@ -26,6 +22,16 @@ const profileSchema = new Schema<ProfileDocument>(
     summary: String,
     skills: [String],
     photo: { type: Schema.Types.ObjectId, ref: "Document" },
+    email: String,
+    phone: String,
+    city: String,
+    country: String,
+    yearsExperience: Number,
+    desiredSalary: String,
+    availability: String,
+    workModel: String,
+    languages: [{ name: String, level: String }],
+    links: [{ label: String, url: String }],
   },
   { timestamps: true },
 );

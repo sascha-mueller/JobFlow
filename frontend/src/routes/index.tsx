@@ -12,6 +12,7 @@ import CompaniesPage from "@/pages/Companies";
 import CompanyDetail from "@/pages/CompanyDetail";
 import ContactsPage from "@/pages/Contacts";
 import PrintApplications from "@/pages/PrintApplications";
+import ProfilePage from "@/pages/ProfilePage";
 
 export default function AppRoutes() {
   return (
@@ -25,6 +26,7 @@ export default function AppRoutes() {
           <Route path="/firmen" element={<CompaniesPage />} />
           <Route path="/firmen/:id" element={<CompanyDetail />} />
           <Route path="/kontakte" element={<ContactsPage />} />
+          <Route path="/profil" element={<ProfilePage />} />
         </Route>
       </Route>
 

@@ -10,6 +10,7 @@
 
 /** PAGES */
 @import "./styles/pages/dashboard.css";
+@import "./styles/pages/profile.css";
 @import "./styles/pages/print.css";
 @import "./styles/pages/applications.css";
 @import "./styles/pages/application-detail.css";

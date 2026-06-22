@@ -5,6 +5,13 @@
   gap: 1rem;
 }
 
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: none;
+}
+
 .header__action {
   flex: none;
   width: auto;

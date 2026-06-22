@@ -1,9 +1,9 @@
 import { Link } from "react-router";
-import { ArrowLeft, Plus } from "lucide-react";
+import { ArrowLeft, Check, Plus } from "lucide-react";
 import { useUiStore } from "@/stores/ui.store";
 
 const Header = () => {
-  const { title, subtitle, metaTitle, metaDescription, action, backLink } =
+  const { title, subtitle, metaTitle, metaDescription, action, secondaryAction, backLink } =
     useUiStore((s) => s.pageMeta);
 
   return (
@@ -32,15 +32,28 @@ const Header = () => {
             </h1>
           </div>
         )}
-        {action && (
-          <button
-            type="button"
-            className="btn btn-primary header__action"
-            onClick={action.onClick}
-          >
-            <Plus size={16} aria-hidden="true" />
-            {action.label}
-          </button>
+        {(secondaryAction || action) && (
+          <div className="header__actions">
+            {secondaryAction && (
+              <button
+                type="button"
+                className="btn btn-ghost"
+                onClick={secondaryAction.onClick}
+              >
+                {secondaryAction.label}
+              </button>
+            )}
+            {action && (
+              <button
+                type="button"
+                className="btn btn-primary header__action"
+                onClick={action.onClick}
+              >
+                {secondaryAction ? <Check size={16} aria-hidden="true" /> : <Plus size={16} aria-hidden="true" />}
+                {action.label}
+              </button>
+            )}
+          </div>
         )}
       </header>
     </>
