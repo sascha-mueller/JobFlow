@@ -181,13 +181,17 @@
 
 /* ── Print media ──────────────────────────────────────────────── */
 
+@page {
+  margin: 0;
+}
+
 @media print {
   .no-print {
     display: none !important;
   }
 
   .print-page {
-    padding: 0;
+    padding: 1.5cm 2cm;
     max-width: none;
   }
 
