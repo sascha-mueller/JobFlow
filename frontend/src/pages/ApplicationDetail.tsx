@@ -2,16 +2,22 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
 import {
+  Bookmark,
   Calendar,
   Check,
+  CheckCircle,
   ExternalLink,
+  FileCheck,
   Mail,
   MapPin,
   Pencil,
+  PenLine,
   Phone,
   Send,
+  Users,
+  XCircle,
 } from "lucide-react";
-import type { Application, CreateApplicationInput } from "@jobflow/shared";
+import type { Application, ApplicationStatus, CreateApplicationInput } from "@jobflow/shared";
 import { applicationsApi } from "@/lib/applications.api";
 import { useUiStore } from "@/stores/ui.store";
 import ApplicationFormDialog, {
@@ -173,25 +179,41 @@ function DescriptionPanel({ app }: { app: Application }) {
 
 /* ── Aktivitäten ────────────────────────────────────────────── */
 
+const STATUS_ICONS: Record<ApplicationStatus, React.ReactNode> = {
+  WATCHLIST: <Bookmark size={14} />,
+  DRAFT:     <PenLine size={14} />,
+  SENT:      <Send size={14} />,
+  INTERVIEW: <Users size={14} />,
+  OFFER:     <FileCheck size={14} />,
+  ACCEPTED:  <CheckCircle size={14} />,
+  REJECTED:  <XCircle size={14} />,
+};
+
 function ActivitiesPanel({ app }: { app: Application }) {
+  const history = [...(app.statusHistory ?? [])].sort(
+    (a, b) => new Date(b.changedAt).getTime() - new Date(a.changedAt).getTime(),
+  );
+
   return (
     <div className="apd-panel">
       <div className="apd-panel__header">
         <span className="apd-panel__title">Aktivitäten</span>
       </div>
-      {app.appliedAt ? (
+      {history.length > 0 ? (
         <ul className="apd-activity-list">
-          <li className="apd-activity-item">
-            <span className="apd-activity-icon" aria-hidden="true">
-              <Send size={14} />
-            </span>
-            <div className="apd-activity-body">
-              <span className="apd-activity-label">Bewerbung abgeschickt</span>
-              <span className="apd-activity-date">
-                {formatDate(app.appliedAt)}
+          {history.map((entry, i) => (
+            <li key={i} className="apd-activity-item">
+              <span className="apd-activity-icon" aria-hidden="true">
+                {STATUS_ICONS[entry.status]}
               </span>
-            </div>
-          </li>
+              <div className="apd-activity-body">
+                <span className="apd-activity-label">
+                  {STATUS_LABELS[entry.status] ?? entry.status}
+                </span>
+                <span className="apd-activity-date">{formatDate(entry.changedAt)}</span>
+              </div>
+            </li>
+          ))}
         </ul>
       ) : (
         <p className="apd-empty">Noch keine Aktivitäten erfasst.</p>

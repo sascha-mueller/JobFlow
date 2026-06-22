@@ -28,6 +28,7 @@ export const createApplication: RequestHandler = async (req, res, next) => {
     const application = await Application.create({
       ...data,
       user: req.user!.id,
+      statusHistory: [{ status: data.status, changedAt: new Date() }],
     });
 
     res.status(201).json(application);
@@ -67,13 +68,7 @@ export const updateApplication: RequestHandler = async (req, res, next) => {
     const { id } = applicationIdParamsSchema.parse(req.params);
     const data = updateApplicationSchema.parse(req.body);
 
-    const application = await Application.findOneAndUpdate(
-      { _id: id, user: req.user!.id },
-      data,
-      { new: true, runValidators: true },
-    )
-      .populate("company", "name")
-      .populate("contact", "name email phone position linkedIn");
+    const application = await Application.findOne({ _id: id, user: req.user!.id });
 
     if (!application) {
       throw new AppError(
@@ -83,6 +78,16 @@ export const updateApplication: RequestHandler = async (req, res, next) => {
         "WARN",
       );
     }
+
+    if (data.status && data.status !== application.status) {
+      application.statusHistory.push({ status: data.status, changedAt: new Date() });
+    }
+
+    Object.assign(application, data);
+    await application.save();
+
+    await application.populate("company", "name");
+    await application.populate("contact", "name email phone position linkedIn");
 
     res.json(application);
   } catch (error: unknown) {

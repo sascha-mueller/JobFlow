@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { Printer, ArrowLeft } from "lucide-react";
-import type { Application, Profile } from "@jobflow/shared";
+import type { Application, ApplicationStatus, Profile } from "@jobflow/shared";
 import { applicationsApi } from "@/lib/applications.api";
 import { profileApi } from "@/lib/profile.api";
 
@@ -90,7 +90,10 @@ export default function PrintApplications() {
                 </td>
 
                 <td className="print-table__td print-table__td--date">
-                  {app.appliedAt ? formatDate(app.appliedAt) : <span className="print-empty">–</span>}
+                  {(() => {
+                    const date = findStatusDate(app, "SENT") ?? app.appliedAt;
+                    return date ? formatDate(date) : <span className="print-empty">–</span>;
+                  })()}
                 </td>
 
                 <td className="print-table__td print-table__td--date">
@@ -122,20 +125,38 @@ function formatDate(iso: string): string {
   });
 }
 
-function resolveResponse(app: Application): React.ReactNode {
-  const isInvited = app.status === "INTERVIEW" || app.status === "OFFER" || app.status === "ACCEPTED";
-  const isRejected = app.status === "REJECTED";
-
-  if (!isInvited && !isRejected) {
-    return <span className="print-response" data-type="open">Offen</span>;
-  }
-
-  const label = isRejected ? "Abgesagt am" : "Eingeladen am";
-  const date = app.followUpAt ? formatDate(app.followUpAt) : "–";
-
-  return (
-    <span className="print-response" data-type={isRejected ? "rejected" : "invited"}>
-      {label} {date}
-    </span>
+function findStatusDate(app: Application, ...statuses: ApplicationStatus[]): string | null {
+  if (!app.statusHistory?.length) return null;
+  const sorted = [...app.statusHistory].sort(
+    (a, b) => new Date(a.changedAt).getTime() - new Date(b.changedAt).getTime(),
   );
+  return sorted.find((h) => statuses.includes(h.status))?.changedAt ?? null;
+}
+
+function resolveResponse(app: Application): React.ReactNode {
+  if (app.status === "ACCEPTED") {
+    const date = findStatusDate(app, "ACCEPTED") ?? app.followUpAt;
+    return (
+      <span className="print-response" data-type="invited">
+        Angenommen{date ? ` am ${formatDate(date)}` : ""}
+      </span>
+    );
+  }
+  if (app.status === "REJECTED") {
+    const date = findStatusDate(app, "REJECTED") ?? app.followUpAt;
+    return (
+      <span className="print-response" data-type="rejected">
+        Abgesagt{date ? ` am ${formatDate(date)}` : ""}
+      </span>
+    );
+  }
+  if (app.status === "OFFER") {
+    const date = findStatusDate(app, "OFFER") ?? app.followUpAt;
+    return (
+      <span className="print-response" data-type="invited">
+        Angebot erhalten{date ? ` am ${formatDate(date)}` : ""}
+      </span>
+    );
+  }
+  return <span className="print-response" data-type="open">Offen</span>;
 }
