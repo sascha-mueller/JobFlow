@@ -9,3 +9,4 @@ export * from "./schemas/document.schemas.ts";
 export * from "./schemas/profile.schemas.ts";
 export * from "./schemas/user.schemas.ts";
 export * from "./schemas/task.schemas.ts";
+export * from "./schemas/common/objectId.schema.ts";

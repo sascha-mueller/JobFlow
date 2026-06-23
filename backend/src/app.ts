@@ -16,6 +16,8 @@ import {
   taskRouter,
 } from "./routes/index.ts";
 
+import aiRouter from "./ai/ai.routes.ts";
+
 const app = express();
 
 app.use(express.json());
@@ -29,6 +31,7 @@ app.use("/api/profiles", profileRouter);
 app.use("/api/docs", docRouter);
 app.use("/api/apps", appRouter);
 app.use("/api/tasks", taskRouter);
+app.use("/api/ai", aiRouter);
 
 app.use((req, res) => {
   console.warn("[404 Route]", {
