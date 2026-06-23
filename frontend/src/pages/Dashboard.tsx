@@ -67,8 +67,8 @@ export default function Dashboard() {
       {/* Pipeline */}
       <div className="dashboard-pipeline">
         <div className="dashboard-pipeline__total">
-          <span className="dashboard-pipeline__total-label">Gesamt</span>
           <span className="dashboard-pipeline__total-count">{applications.length}</span>
+          <span className="dashboard-pipeline__total-label">Gesamt</span>
         </div>
         {PIPELINE_STATS.map(({ key, label, statuses }) => {
           const count = statuses.reduce((sum, s) => sum + (pipelineCounts[s] ?? 0), 0);
