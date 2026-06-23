@@ -1,6 +1,5 @@
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import type { JwtPayload } from "jsonwebtoken";
+import jwt, { type JwtPayload } from "jsonwebtoken";
 
 import {
   NODE_ENV,
@@ -67,15 +66,32 @@ export const getBearerToken = (authHeader?: string) => {
 };
 
 export const parseAccessToken = (token: string) => {
-  const payload = verifyToken<JwtPayload>(token, ACCESS_JWT_SECRET);
+  try {
+    const payload = verifyToken<JwtPayload>(token, ACCESS_JWT_SECRET);
 
-  if (!payload.sub) {
-    throw new AppError(401, "Invalid token payload", "INVALID_TOKEN", "WARN");
+    if (!payload.sub) {
+      throw new AppError(401, "Invalid token payload", "INVALID_TOKEN", "WARN");
+    }
+
+    return {
+      id: payload.sub,
+    };
+  } catch (error: unknown) {
+    if (error instanceof jwt.TokenExpiredError) {
+      throw new AppError(
+        401,
+        "Access token has expired",
+        "TOKEN_EXPIRED",
+        "WARN",
+      );
+    }
+
+    if (error instanceof jwt.JsonWebTokenError) {
+      throw new AppError(401, "Invalid access token", "INVALID_TOKEN", "WARN");
+    }
+
+    throw error;
   }
-
-  return {
-    id: payload.sub,
-  };
 };
 
 export const refreshAccessToken = async (refreshToken: string) => {
