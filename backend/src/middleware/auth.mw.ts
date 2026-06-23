@@ -1,4 +1,5 @@
 import type { RequestHandler } from "express";
+import { JsonWebTokenError } from "jsonwebtoken";
 
 import { AppError } from "../utils/index.ts";
 import { parseAccessToken } from "../services/index.ts";
@@ -18,6 +19,10 @@ export const authToken: RequestHandler = (req, _res, next) => {
 
     next();
   } catch (error) {
-    next(error);
+    if (error instanceof JsonWebTokenError) {
+      next(new AppError(401, "Invalid or expired token", "INVALID_TOKEN", "WARN"));
+    } else {
+      next(error);
+    }
   }
 };
