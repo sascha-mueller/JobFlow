@@ -10,8 +10,22 @@ const NAV_ITEMS = [
   { to: "/profil", label: "Meine Daten", Icon: UserRound },
 ];
 
+function getInitials(firstName?: string, lastName?: string, email?: string): string {
+  if (firstName && lastName) return `${firstName[0]}${lastName[0]}`.toUpperCase();
+  if (firstName) return firstName[0].toUpperCase();
+  if (email) return email[0].toUpperCase();
+  return "?";
+}
+
 const NavSidebar = () => {
   const logout = useAuthStore((s) => s.logout);
+  const user = useAuthStore((s) => s.user);
+
+  const initials = getInitials(user?.firstName, user?.lastName, user?.email);
+  const displayName =
+    user?.firstName && user?.lastName
+      ? `${user.firstName} ${user.lastName}`
+      : user?.email ?? "";
 
   return (
     <nav className="nav-sidebar">
@@ -26,10 +40,28 @@ const NavSidebar = () => {
           </li>
         ))}
       </ul>
-      <button className="nav-sidebar__logout" type="button" onClick={logout}>
-        <LogOut size={18} aria-hidden="true" />
-        Abmelden
-      </button>
+      <div className="nav-sidebar__user-card">
+        <span className="nav-sidebar__avatar" aria-hidden="true">
+          {initials}
+        </span>
+        <span className="nav-sidebar__user-info">
+          <span className="nav-sidebar__user-name">{displayName}</span>
+          {user?.firstName && (
+            <span className="nav-sidebar__user-email">{user.email}</span>
+          )}
+        </span>
+        <span className="nav-sidebar__user-email-mobile" aria-hidden="true">
+          {user?.email}
+        </span>
+        <button
+          className="nav-sidebar__logout"
+          type="button"
+          onClick={logout}
+        >
+          <LogOut size={18} aria-hidden="true" />
+          <span className="nav-sidebar__logout-label">Abmelden</span>
+        </button>
+      </div>
     </nav>
   );
 };

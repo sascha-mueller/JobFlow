@@ -3,6 +3,8 @@ import { create } from "zustand";
 interface AuthUser {
   id: string;
   email: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 interface AuthStore {
@@ -20,6 +22,20 @@ interface AuthStore {
   logout: () => Promise<void>;
   refresh: () => Promise<boolean>;
   init: () => Promise<void>;
+}
+
+async function loadProfileName(accessToken: string): Promise<{ firstName?: string; lastName?: string }> {
+  try {
+    const res = await fetch("/api/profiles", {
+      credentials: "include",
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    if (!res.ok) return {};
+    const profile = await res.json();
+    return { firstName: profile.firstName, lastName: profile.lastName };
+  } catch {
+    return {};
+  }
 }
 
 export const useAuthStore = create<AuthStore>((set, get) => ({
@@ -42,8 +58,9 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     }
 
     const data = await res.json();
+    const name = await loadProfileName(data.accessToken);
     set({
-      user: data.user,
+      user: { ...data.user, ...name },
       accessToken: data.accessToken,
       isAuthenticated: true,
     });
@@ -63,11 +80,6 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     }
 
     const data = await res.json();
-    set({
-      user: data.user,
-      accessToken: data.accessToken,
-      isAuthenticated: true,
-    });
 
     await fetch("/api/profiles", {
       method: "POST",
@@ -77,6 +89,12 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
         Authorization: `Bearer ${data.accessToken}`,
       },
       body: JSON.stringify({ firstName, lastName }),
+    });
+
+    set({
+      user: { ...data.user, firstName, lastName },
+      accessToken: data.accessToken,
+      isAuthenticated: true,
     });
   },
 
@@ -107,8 +125,9 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       }
 
       const data = await res.json();
+      const name = await loadProfileName(data.accessToken);
       set({
-        user: data.user,
+        user: { ...data.user, ...name },
         accessToken: data.accessToken,
         isAuthenticated: true,
       });
