@@ -26,7 +26,7 @@ interface AuthStore {
 
 async function loadProfileName(accessToken: string): Promise<{ firstName?: string; lastName?: string }> {
   try {
-    const res = await fetch("/api/profiles", {
+    const res = await fetch("/api/profiles/me", {
       credentials: "include",
       headers: { Authorization: `Bearer ${accessToken}` },
     });

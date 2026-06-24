@@ -10,18 +10,16 @@ const NAV_ITEMS = [
   { to: "/profil", label: "Meine Daten", Icon: UserRound },
 ];
 
-function getInitials(firstName?: string, lastName?: string, email?: string): string {
+function getInitials(firstName?: string, lastName?: string): string {
   if (firstName && lastName) return `${firstName[0]}${lastName[0]}`.toUpperCase();
-  if (firstName) return firstName[0].toUpperCase();
-  if (email) return email[0].toUpperCase();
-  return "?";
+  return "??";
 }
 
 const NavSidebar = () => {
   const logout = useAuthStore((s) => s.logout);
   const user = useAuthStore((s) => s.user);
 
-  const initials = getInitials(user?.firstName, user?.lastName, user?.email);
+  const initials = getInitials(user?.firstName, user?.lastName);
   const displayName =
     user?.firstName && user?.lastName
       ? `${user.firstName} ${user.lastName}`
