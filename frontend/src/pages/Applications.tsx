@@ -141,12 +141,12 @@ export default function Applications() {
       {/* Pipeline-Statusbar */}
       <div className="apps-pipeline">
         <div className="apps-pipeline__total">
-          <span className="apps-pipeline__total-label">
-            STATUS DER PIPELINE
-          </span>
           <span className="apps-pipeline__total-count">
             {applications.length}{" "}
             {applications.length === 1 ? "Bewerbung" : "Bewerbungen"}
+          </span>
+          <span className="apps-pipeline__total-label">
+            STATUS DER PIPELINE
           </span>
         </div>
         {PIPELINE_STATS.map(({ key, label, statuses }) => {
@@ -162,10 +162,10 @@ export default function Applications() {
                 setActiveFilter((f) => (f === key ? "ALL" : key))
               }
             >
-              <span className="apps-pipeline__stat-label">{label}</span>
               <span className="apps-pipeline__stat-count">
                 {String(count).padStart(2, "0")}
               </span>
+              <span className="apps-pipeline__stat-label">{label}</span>
             </button>
           );
         })}

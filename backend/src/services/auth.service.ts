@@ -67,7 +67,12 @@ export const getBearerToken = (authHeader?: string) => {
 };
 
 export const parseAccessToken = (token: string) => {
-  const payload = verifyToken<JwtPayload>(token, ACCESS_JWT_SECRET);
+  let payload: JwtPayload;
+  try {
+    payload = verifyToken<JwtPayload>(token, ACCESS_JWT_SECRET);
+  } catch {
+    throw new AppError(401, "Invalid or expired token", "INVALID_TOKEN", "WARN");
+  }
 
   if (!payload.sub) {
     throw new AppError(401, "Invalid token payload", "INVALID_TOKEN", "WARN");
