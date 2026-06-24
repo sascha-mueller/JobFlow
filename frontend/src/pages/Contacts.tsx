@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import type { Company, Contact, CreateContactInput } from "@jobflow/shared";
+import type { Company, Contact, CreateContactInput, UpdateContactInput } from "@jobflow/shared";
 import { createContactSchema } from "@jobflow/shared";
 import { contactsApi } from "@/lib/contacts.api";
 import { companiesApi } from "@/lib/companies.api";
@@ -58,7 +58,7 @@ export default function Contacts() {
     toast.success(`${contact.name} wurde angelegt.`);
   };
 
-  const handleUpdate = async (id: string, data: CreateContactInput) => {
+  const handleUpdate = async (id: string, data: UpdateContactInput) => {
     const updated = await contactsApi.update(id, data);
     setContacts((prev) => prev.map((c) => (c._id === id ? updated : c)));
     closeDialog();
@@ -108,8 +108,8 @@ export default function Contacts() {
         onClose={closeDialog}
         onSubmit={(data) =>
           dialog?.mode === "edit"
-            ? handleUpdate(dialog.contact._id, data)
-            : handleCreate(data)
+            ? handleUpdate(dialog.contact._id, data as UpdateContactInput)
+            : handleCreate(data as CreateContactInput)
         }
       />
     </div>
@@ -225,7 +225,7 @@ interface ContactFormDialogProps {
   defaultValues?: Partial<CreateContactInput>;
   companies: Company[];
   onClose: () => void;
-  onSubmit: (data: CreateContactInput) => Promise<void>;
+  onSubmit: (data: CreateContactInput | UpdateContactInput) => Promise<void>;
 }
 
 function ContactFormDialog({
@@ -251,10 +251,10 @@ function ContactFormDialog({
 
   const submit = async (data: CreateContactInput) => {
     try {
-      const cleaned: CreateContactInput = {
+      const cleaned = {
         ...data,
         phone: data.phone || undefined,
-        company: data.company || undefined,
+        company: data.company || null,
         linkedIn: data.linkedIn || undefined,
       };
       await onSubmit(cleaned);

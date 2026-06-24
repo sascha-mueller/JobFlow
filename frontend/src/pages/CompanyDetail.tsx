@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate, useParams } from "react-router";
-import { ExternalLink, Mail, MapPin, Phone, Plus } from "lucide-react";
+import { ExternalLink, Mail, MapPin, Phone, Plus, Unlink } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -32,6 +32,7 @@ export default function CompanyDetail() {
   const [showLinkDialog, setShowLinkDialog] = useState(false);
   const [showSelectDialog, setShowSelectDialog] = useState(false);
   const [allContacts, setAllContacts] = useState<Contact[]>([]);
+  const [unlinkingId, setUnlinkingId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!id) {
@@ -115,8 +116,17 @@ export default function CompanyDetail() {
       <div className="cd-grid">
         <ContactsPanel
           contacts={contacts}
+          unlinkingId={unlinkingId}
           onAdd={() => setShowLinkDialog(true)}
           onLink={() => setShowSelectDialog(true)}
+          onUnlinkRequest={(id) => setUnlinkingId(id)}
+          onUnlinkConfirm={async (id) => {
+            await contactsApi.update(id, { company: null });
+            setContacts((prev) => prev.filter((c) => c._id !== id));
+            setUnlinkingId(null);
+            toast.success("Verknüpfung aufgehoben.");
+          }}
+          onUnlinkCancel={() => setUnlinkingId(null)}
         />
         <ApplicationsPanel companyId={company._id} />
       </div>
@@ -150,12 +160,20 @@ export default function CompanyDetail() {
 
 function ContactsPanel({
   contacts,
+  unlinkingId,
   onAdd,
   onLink,
+  onUnlinkRequest,
+  onUnlinkConfirm,
+  onUnlinkCancel,
 }: {
   contacts: Contact[];
+  unlinkingId: string | null;
   onAdd: () => void;
   onLink: () => void;
+  onUnlinkRequest: (id: string) => void;
+  onUnlinkConfirm: (id: string) => Promise<void>;
+  onUnlinkCancel: () => void;
 }) {
   return (
     <div className="cd-panel">
@@ -221,6 +239,33 @@ function ContactsPanel({
                     </a>
                   )}
                 </div>
+              </div>
+              <div className="cd-contact-actions">
+                {unlinkingId === contact._id ? (
+                  <>
+                    <span className="company-card__delete-label">Aufheben?</span>
+                    <button
+                      className="btn btn-sm company-card__action-btn company-card__action-btn--danger"
+                      onClick={() => onUnlinkConfirm(contact._id)}
+                    >
+                      Ja
+                    </button>
+                    <button
+                      className="btn btn-sm company-card__action-btn"
+                      onClick={onUnlinkCancel}
+                    >
+                      Nein
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    className="company-card__icon-btn"
+                    onClick={() => onUnlinkRequest(contact._id)}
+                    aria-label={`Verknüpfung mit ${contact.name} aufheben`}
+                  >
+                    <Unlink size={14} />
+                  </button>
+                )}
               </div>
             </li>
           ))}

@@ -98,9 +98,17 @@ export const updateContact: RequestHandler = async (req, res, next) => {
       }
     }
 
+    const { company, ...rest } = data;
+    const updateOp: Record<string, unknown> = { $set: rest };
+    if (company === null) {
+      updateOp.$unset = { company: 1 };
+    } else if (company !== undefined) {
+      (updateOp.$set as Record<string, unknown>).company = company;
+    }
+
     const contact = await Contact.findOneAndUpdate(
       { _id: id, user: req.user!.id },
-      data,
+      updateOp,
       {
         new: true,
         runValidators: true,

@@ -168,6 +168,14 @@
     min-width: 0;
   }
 
+  .cd-contact-actions {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-top: 1px;
+  }
+
   .cd-contact-name {
     font-weight: 600;
     font-size: 14px;

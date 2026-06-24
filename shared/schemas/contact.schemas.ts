@@ -14,7 +14,9 @@ export const createContactSchema = z.object({
     .pipe(z.url().optional()),
 });
 
-export const updateContactSchema = createContactSchema.partial();
+export const updateContactSchema = createContactSchema.partial().extend({
+  company: z.string().nullable().optional(),
+});
 
 export type CreateContactInput = z.infer<typeof createContactSchema>;
 export type UpdateContactInput = z.infer<typeof updateContactSchema>;
