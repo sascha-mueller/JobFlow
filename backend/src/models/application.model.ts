@@ -14,7 +14,11 @@ type ApplicationDocument = Omit<
   appliedAt?: Date;
   deadline?: Date;
   followUpAt?: Date;
-  statusHistory: { status: string; changedAt: Date; note?: string }[];
+  statusHistory: Types.DocumentArray<{
+    status: string;
+    changedAt: Date;
+    note?: string;
+  }>;
 };
 
 const applicationSchema = new Schema<ApplicationDocument>(

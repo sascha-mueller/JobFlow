@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JobFlow – Deine Bewerbungen im Griff</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #0a1628;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .hero {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .hero-illustration {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .hero-illustration svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      .btn-primary {
+        position: absolute;
+        bottom: 2.5rem;
+        right: 2.5rem;
+        z-index: 10;
+        background: #1d9e75;
+        color: #fff;
+        padding: 0.85rem 2rem;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        transition:
+          background 0.2s,
+          transform 0.15s;
+      }
+      .btn-primary:hover {
+        background: #0f6e56;
+        transform: translateY(-2px);
+      }
+    </style>
+  </head>
+  <body>
+    <section class="hero">
+      <div class="hero-illustration">
+        <svg
+          viewBox="0 0 680 480"
+          preserveAspectRatio="xMidYMid slice"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <!-- Sky warm -->
+          <rect x="0" y="0" width="680" height="480" fill="#FAEEDA" />
+          <rect
+            x="0"
+            y="0"
+            width="680"
+            height="260"
+            fill="#FAC775"
+            opacity="0.55"
+          />
+          <rect
+            x="0"
+            y="0"
+            width="680"
+            height="140"
+            fill="#EF9F27"
+            opacity="0.4"
+          />
+
+          <!-- Sun glow -->
+          <ellipse
+            cx="520"
+            cy="228"
+            rx="150"
+            ry="60"
+            fill="#FAC775"
+            opacity="0.6"
+          />
+          <ellipse
+            cx="520"
+            cy="228"
+            rx="80"
+            ry="36"
+            fill="#EF9F27"
+            opacity="0.4"
+          />
+
+          <!-- Distant hills -->
+          <ellipse cx="80" cy="268" rx="180" ry="50" fill="#D3D1C7" />
+          <ellipse cx="290" cy="258" rx="240" ry="58" fill="#B4B2A9" />
+          <ellipse cx="530" cy="260" rx="220" ry="55" fill="#D3D1C7" />
+
+          <!-- Ground -->
+          <rect x="0" y="265" width="680" height="215" fill="#639922" />
+          <rect
+            x="0"
+            y="265"
+            width="680"
+            height="14"
+            fill="#3B6D11"
+            opacity="0.35"
+          />
+          <ellipse
+            cx="340"
+            cy="420"
+            rx="420"
+            ry="85"
+            fill="#97C459"
+            opacity="0.4"
+          />
+
+          <!-- Path fill: from bottom-left, gentle rightward bow, reaches horizon -->
+          <path
+            d="M 60,480 Q 90,330 615,265 L 645,265 Q 235,340 210,480 Z"
+            fill="#FAC775"
+            opacity="0.52"
+          />
+          <!-- Outer edge -->
+          <path
+            d="M 60,480 Q 90,330 615,265"
+            stroke="#EF9F27"
+            stroke-width="2"
+            fill="none"
+            opacity="0.8"
+          />
+          <!-- Inner edge -->
+          <path
+            d="M 210,480 Q 235,340 645,265"
+            stroke="#EF9F27"
+            stroke-width="2"
+            fill="none"
+            opacity="0.8"
+          />
+          <!-- Dashed center -->
+          <path
+            d="M 135,480 Q 162,335 630,265"
+            stroke="#FAEEDA"
+            stroke-width="2"
+            fill="none"
+            stroke-dasharray="14,10"
+            stroke-linecap="round"
+            opacity="0.55"
+          />
+
+          <!-- Trees left -->
+          <g fill="#3B6D11">
+            <polygon points="0,452 15,380 30,452" />
+            <polygon points="5,420 15,374 25,420" />
+            <polygon points="34,442 48,372 62,442" />
+            <polygon points="39,410 48,366 57,410" />
+          </g>
+
+          <!-- Trees right lower -->
+          <g fill="#3B6D11">
+            <polygon points="278,455 293,382 308,455" />
+            <polygon points="283,422 293,376 303,422" />
+            <polygon points="315,448 329,378 343,448" />
+            <polygon points="320,416 329,372 338,416" />
+          </g>
+
+          <!-- Trees right upper -->
+          <g fill="#3B6D11">
+            <polygon points="548,348 562,298 576,348" />
+            <polygon points="554,324 562,293 570,324" />
+            <polygon points="580,342 593,296 606,342" />
+            <polygon points="586,318 593,290 600,318" />
+          </g>
+
+          <!-- Screen glow -->
+          <ellipse
+            cx="520"
+            cy="218"
+            rx="100"
+            ry="52"
+            fill="#FAC775"
+            opacity="0.45"
+          />
+          <ellipse
+            cx="520"
+            cy="218"
+            rx="58"
+            ry="32"
+            fill="#EF9F27"
+            opacity="0.25"
+          />
+
+          <!-- Screen frame -->
+          <rect
+            x="452"
+            y="152"
+            width="138"
+            height="96"
+            rx="6"
+            fill="#042C53"
+            stroke="#378ADD"
+            stroke-width="1.5"
+          />
+          <rect x="459" y="159" width="124" height="78" rx="3" fill="#0a1628" />
+          <rect x="459" y="159" width="124" height="13" rx="3" fill="#185FA5" />
+          <circle cx="571" cy="165" r="3" fill="#1D9E75" />
+          <circle cx="578" cy="165" r="3" fill="#EF9F27" />
+
+          <rect
+            x="462"
+            y="176"
+            width="32"
+            height="54"
+            rx="2"
+            fill="#0C447C"
+            opacity="0.75"
+          />
+          <rect
+            x="497"
+            y="176"
+            width="32"
+            height="54"
+            rx="2"
+            fill="#0C447C"
+            opacity="0.75"
+          />
+          <rect
+            x="532"
+            y="176"
+            width="32"
+            height="54"
+            rx="2"
+            fill="#0C447C"
+            opacity="0.75"
+          />
+          <rect
+            x="567"
+            y="176"
+            width="11"
+            height="54"
+            rx="2"
+            fill="#0C447C"
+            opacity="0.4"
+          />
+
+          <text
+            x="464"
+            y="184"
+            font-family="sans-serif"
+            font-size="4.5"
+            fill="#85B7EB"
+          >
+            Beworben
+          </text>
+          <text
+            x="499"
+            y="184"
+            font-family="sans-serif"
+            font-size="4.5"
+            fill="#85B7EB"
+          >
+            Interview
+          </text>
+          <text
+            x="534"
+            y="184"
+            font-family="sans-serif"
+            font-size="4.5"
+            fill="#85B7EB"
+          >
+            Angebot
+          </text>
+
+          <rect x="464" y="187" width="27" height="8" rx="1.5" fill="#185FA5" />
+          <rect
+            x="464"
+            y="198"
+            width="27"
+            height="8"
+            rx="1.5"
+            fill="#185FA5"
+            opacity="0.7"
+          />
+          <rect
+            x="464"
+            y="209"
+            width="27"
+            height="8"
+            rx="1.5"
+            fill="#185FA5"
+            opacity="0.5"
+          />
+          <rect x="499" y="187" width="27" height="8" rx="1.5" fill="#0F6E56" />
+          <rect
+            x="499"
+            y="198"
+            width="27"
+            height="8"
+            rx="1.5"
+            fill="#0F6E56"
+            opacity="0.7"
+          />
+          <rect x="534" y="187" width="27" height="8" rx="1.5" fill="#854F0B" />
+
+          <rect
+            x="512"
+            y="248"
+            width="14"
+            height="7"
+            rx="1"
+            fill="#185FA5"
+            opacity="0.7"
+          />
+          <rect
+            x="502"
+            y="254"
+            width="34"
+            height="4"
+            rx="2"
+            fill="#185FA5"
+            opacity="0.7"
+          />
+
+          <!-- Wanderer standing on the ground -->
+          <g transform="translate(133, 390)">
+            <ellipse
+              cx="8"
+              cy="30"
+              rx="20"
+              ry="5"
+              fill="#3B6D11"
+              opacity="0.28"
+            />
+            <rect x="11" y="-68" width="15" height="20" rx="3" fill="#533AB7" />
+            <rect x="-2" y="-68" width="15" height="28" rx="5" fill="#185FA5" />
+            <circle cx="6" cy="-76" r="10" fill="#FAC775" />
+            <ellipse cx="6" cy="-86" rx="13" ry="4.5" fill="#633806" />
+            <rect x="0" y="-90" width="13" height="8" rx="2" fill="#854F0B" />
+            <line
+              x1="3"
+              y1="-40"
+              x2="-7"
+              y2="26"
+              stroke="#0C447C"
+              stroke-width="5"
+              stroke-linecap="round"
+            />
+            <line
+              x1="9"
+              y1="-40"
+              x2="20"
+              y2="24"
+              stroke="#0C447C"
+              stroke-width="5"
+              stroke-linecap="round"
+            />
+            <ellipse cx="-7" cy="30" rx="9" ry="4" fill="#444441" />
+            <ellipse cx="20" cy="28" rx="9" ry="4" fill="#444441" />
+            <line
+              x1="-1"
+              y1="-58"
+              x2="-17"
+              y2="-40"
+              stroke="#185FA5"
+              stroke-width="4"
+              stroke-linecap="round"
+            />
+            <line
+              x1="11"
+              y1="-58"
+              x2="24"
+              y2="-36"
+              stroke="#185FA5"
+              stroke-width="4"
+              stroke-linecap="round"
+            />
+            <line
+              x1="-17"
+              y1="-40"
+              x2="-26"
+              y2="30"
+              stroke="#854F0B"
+              stroke-width="3"
+              stroke-linecap="round"
+            />
+            <ellipse
+              cx="-26"
+              cy="30"
+              rx="3"
+              ry="2"
+              fill="#854F0B"
+              opacity="0.7"
+            />
+          </g>
+
+          <!-- Birds -->
+          <g
+            stroke="#633806"
+            stroke-width="1.5"
+            fill="none"
+            stroke-linecap="round"
+            opacity="0.5"
+          >
+            <path d="M 280,72 Q 286,68 292,72" />
+            <path d="M 298,62 Q 305,58 312,62" />
+            <path d="M 420,55 Q 427,51 434,55" />
+            <path d="M 440,67 Q 446,63 452,67" />
+          </g>
+        </svg>
+      </div>
+
+      <a href="http://localhost:5173/login" class="btn-primary"
+        >Jetzt starten</a
+      >
+    </section>
+  </body>
+</html>

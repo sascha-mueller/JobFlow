@@ -32,6 +32,19 @@ export const applicationIdParamsSchema = z.object({
   id: objectIdSchema,
 });
 
+export const applicationHistoryParamsSchema = z.object({
+  id: objectIdSchema,
+  historyId: objectIdSchema,
+});
+
+export const updateStatusHistoryEntrySchema = z.object({
+  changedAt: z.string(),
+});
+
+export type UpdateStatusHistoryEntryInput = z.infer<
+  typeof updateStatusHistoryEntrySchema
+>;
+
 export type PopulatedCompany = { _id: string; name: string };
 
 export type PopulatedContact = {
@@ -44,6 +57,7 @@ export type PopulatedContact = {
 };
 
 export type StatusHistoryEntry = {
+  _id: string;
   status: ApplicationStatus;
   changedAt: string;
   note?: string;

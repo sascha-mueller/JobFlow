@@ -2,9 +2,11 @@ import type { RequestHandler } from "express";
 
 import { Application } from "../models/index.ts";
 import {
+  applicationHistoryParamsSchema,
   applicationIdParamsSchema,
   createApplicationSchema,
   updateApplicationSchema,
+  updateStatusHistoryEntrySchema,
 } from "@jobflow/shared";
 import { AppError } from "../utils/index.ts";
 
@@ -84,6 +86,45 @@ export const updateApplication: RequestHandler = async (req, res, next) => {
     }
 
     Object.assign(application, data);
+    await application.save();
+
+    await application.populate("company", "name");
+    await application.populate("contact", "name email phone position linkedIn");
+
+    res.json(application);
+  } catch (error: unknown) {
+    next(error);
+  }
+};
+
+export const updateStatusHistoryEntry: RequestHandler = async (req, res, next) => {
+  try {
+    const { id, historyId } = applicationHistoryParamsSchema.parse(req.params);
+    const data = updateStatusHistoryEntrySchema.parse(req.body);
+
+    const application = await Application.findOne({ _id: id, user: req.user!.id });
+
+    if (!application) {
+      throw new AppError(
+        404,
+        `Application: ${id} not found`,
+        "NO_APPLICATION",
+        "WARN",
+      );
+    }
+
+    const entry = application.statusHistory.id(historyId);
+
+    if (!entry) {
+      throw new AppError(
+        404,
+        `Status history entry: ${historyId} not found`,
+        "NO_STATUS_HISTORY_ENTRY",
+        "WARN",
+      );
+    }
+
+    entry.changedAt = new Date(data.changedAt);
     await application.save();
 
     await application.populate("company", "name");

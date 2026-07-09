@@ -128,7 +128,7 @@ export default function ApplicationDetail() {
         {/* Linke Spalte */}
         <div className="apd-col-main">
           <DescriptionPanel app={app} />
-          <ActivitiesPanel app={app} />
+          <ActivitiesPanel app={app} onUpdated={setApp} />
           <NotesPanel app={app} onSaved={(notes) => setApp({ ...app, notes })} />
         </div>
 
@@ -189,10 +189,40 @@ const STATUS_ICONS: Record<ApplicationStatus, React.ReactNode> = {
   REJECTED:  <XCircle size={14} />,
 };
 
-function ActivitiesPanel({ app }: { app: Application }) {
+function ActivitiesPanel({
+  app,
+  onUpdated,
+}: {
+  app: Application;
+  onUpdated: (app: Application) => void;
+}) {
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [value, setValue] = useState("");
+  const [saving, setSaving] = useState(false);
+
   const history = [...(app.statusHistory ?? [])].sort(
     (a, b) => new Date(b.changedAt).getTime() - new Date(a.changedAt).getTime(),
   );
+
+  const startEdit = (entry: (typeof history)[number]) => {
+    setEditingId(entry._id);
+    setValue(entry.changedAt.slice(0, 10));
+  };
+
+  const cancelEdit = () => setEditingId(null);
+
+  const saveEdit = async (historyId: string) => {
+    setSaving(true);
+    try {
+      const updated = await applicationsApi.updateHistoryEntry(app._id, historyId, value);
+      onUpdated(updated);
+      setEditingId(null);
+    } catch {
+      toast.error("Datum konnte nicht gespeichert werden.");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <div className="apd-panel">
@@ -201,8 +231,8 @@ function ActivitiesPanel({ app }: { app: Application }) {
       </div>
       {history.length > 0 ? (
         <ul className="apd-activity-list">
-          {history.map((entry, i) => (
-            <li key={i} className="apd-activity-item">
+          {history.map((entry) => (
+            <li key={entry._id} className="apd-activity-item">
               <span className="apd-activity-icon" aria-hidden="true">
                 {STATUS_ICONS[entry.status]}
               </span>
@@ -210,7 +240,45 @@ function ActivitiesPanel({ app }: { app: Application }) {
                 <span className="apd-activity-label">
                   {STATUS_LABELS[entry.status] ?? entry.status}
                 </span>
-                <span className="apd-activity-date">{formatDate(entry.changedAt)}</span>
+                {editingId === entry._id ? (
+                  <div className="apd-activity-edit-form">
+                    <input
+                      type="date"
+                      value={value}
+                      onChange={(e) => setValue(e.target.value)}
+                      className="apd-activity-edit-input"
+                      autoFocus
+                    />
+                    <button
+                      type="button"
+                      className="btn btn-primary apd-activity-edit-btn"
+                      onClick={() => saveEdit(entry._id)}
+                      disabled={saving}
+                    >
+                      Speichern
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-ghost apd-activity-edit-btn"
+                      onClick={cancelEdit}
+                      disabled={saving}
+                    >
+                      Abbrechen
+                    </button>
+                  </div>
+                ) : (
+                  <span className="apd-activity-date">
+                    {formatDate(entry.changedAt)}
+                    <button
+                      type="button"
+                      className="apd-activity-edit-trigger"
+                      onClick={() => startEdit(entry)}
+                      aria-label="Datum bearbeiten"
+                    >
+                      <Pencil size={11} />
+                    </button>
+                  </span>
+                )}
               </div>
             </li>
           ))}

@@ -12,5 +12,9 @@ export const applicationsApi = {
     api.post<Application>("/applications", data),
   update: (id: string, data: UpdateApplicationInput) =>
     api.patch<Application>(`/applications/${id}`, data),
+  updateHistoryEntry: (appId: string, historyId: string, changedAt: string) =>
+    api.patch<Application>(`/applications/${appId}/history/${historyId}`, {
+      changedAt,
+    }),
   remove: (id: string) => api.delete<void>(`/applications/${id}`),
 };
