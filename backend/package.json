@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "node --watch --strip-types --conditions=development --env-file=.env src/app.ts",
+    "dev": "node --watch --strip-types --conditions=development --env-file=.env --env-file=.env.dev src/app.ts",
+    "dev:prod-db": "node --watch --strip-types --conditions=development --env-file=.env --env-file=.env.prod src/app.ts",
     "test": "vitest",
     "typecheck": "tsc --noEmit"
   },
